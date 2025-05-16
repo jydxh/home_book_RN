@@ -5,7 +5,9 @@ import { Stack } from "expo-router";
 export default function RootLayout() {
 	return (
 		<ClerkProvider tokenCache={tokenCache}>
-			<Stack />
+			<Stack>
+				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+			</Stack>
 		</ClerkProvider>
 	);
 }
