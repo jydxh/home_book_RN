@@ -89,7 +89,7 @@ export default function LoginComponents() {
 	};
 	return (
 		<KeyboardAvoidingView
-			className="flex-1"
+			className="flex-1 mt-14"
 			behavior={Platform.OS === "ios" ? "padding" : "height"}>
 			<ScrollView
 				contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start" }}
@@ -105,7 +105,7 @@ export default function LoginComponents() {
 						</Text>
 					</View>
 					{/* hr */}
-					<View className="my-10 border-b w-full border-gray-300" />
+					<View className="my-10 border-b w-full border-gray-400" />
 					{/* pwd login */}
 					<View className="gap-2">
 						<View className="gap-2">
