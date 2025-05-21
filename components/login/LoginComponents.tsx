@@ -13,7 +13,11 @@ import {
 } from "react-native";
 import MyButton from "../ui/MyButton";
 
-export default function LoginComponents() {
+export default function LoginComponents({
+	description = "Sign in to get more features",
+}: {
+	description?: string;
+}) {
 	const { signIn, setActive, isLoaded } = useSignIn();
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const router = useRouter();
@@ -100,9 +104,7 @@ export default function LoginComponents() {
 						<Text className="font-bold text-2xl">
 							Hi, Welcome to HomeBook 👋
 						</Text>
-						<Text className="text-gray-500 mt-2">
-							Sign In to get more features
-						</Text>
+						<Text className="text-gray-500 mt-2">{description}</Text>
 					</View>
 					{/* hr */}
 					<View className="my-10 border-b w-full border-gray-400" />

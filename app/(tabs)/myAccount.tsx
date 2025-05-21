@@ -1,9 +1,11 @@
-import { Text, View } from "react-native";
-const myAccountPage = () => {
+import { useClerk } from "@clerk/clerk-expo";
+import { Button, View } from "react-native";
+const MyAccountPage = () => {
+	const { signOut } = useClerk();
 	return (
 		<View>
-			<Text>Page</Text>
+			<Button onPress={() => signOut()} title="sign out" />
 		</View>
 	);
 };
-export default myAccountPage;
+export default MyAccountPage;
