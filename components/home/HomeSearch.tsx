@@ -5,7 +5,7 @@ export default function HomeSearch() {
 	return (
 		<LinearGradient
 			colors={["#E5E7EB", "#FAFAFA"]}
-			className="border-b border-gray-200 pb-10 pt-4 px-6">
+			className="border-b border-gray-200 py-4 px-6">
 			<View>
 				<TextInput
 					className="border rounded-full pl-6 text-xl border-gray-300 bg-white"
