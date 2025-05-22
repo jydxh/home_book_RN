@@ -1,5 +1,5 @@
-import { Text, TouchableOpacity } from "react-native";
-import LoadingCircle from "./LoadingCircle";
+import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
+
 export default function MyButton({
 	wrapperClassName,
 	textClassName,
@@ -23,7 +23,7 @@ export default function MyButton({
 				disabled ? `bg-gray-400 ${disabledClassName ?? ""}` : "bg-sky-500"
 			} `}>
 			{/* spinning UI */}
-			{disabled && <LoadingCircle size={20} color="#6A7282" />}
+			{disabled && <ActivityIndicator size={20} color="#6A7282" />}
 			<Text className={`text-center font-semibold text-white ${textClassName}`}>
 				{text}
 			</Text>

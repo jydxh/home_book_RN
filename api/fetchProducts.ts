@@ -1,11 +1,17 @@
 import { backendProxyUrl } from "@/constants/baseUrls";
 import { FetchedProductsResponse } from "@/constants/types";
 
-export const fetchProducts = async (): Promise<
-	FetchedProductsResponse | undefined
-> => {
+export const fetchProducts = async ({
+	category,
+}: {
+	category?: string;
+}): Promise<FetchedProductsResponse | undefined> => {
 	try {
-		const response = await fetch(backendProxyUrl + "/api/products");
+		const url = new URL(backendProxyUrl + "/api/products");
+
+		if (category) url.searchParams.set("category", category);
+
+		const response = await fetch(url);
 
 		if (!response.ok) throw new Error("error at fetching data");
 		const result = await response.json();
