@@ -23,14 +23,14 @@ export default function HomeCategory() {
 	};
 
 	return (
-		<View className="overflow-hidden ">
+		<View className="overflow-hidden">
 			<FlatList
 				data={categories}
 				horizontal
 				scrollToOverflowEnabled={false}
 				showsHorizontalScrollIndicator={false}
 				keyExtractor={item => item.id}
-				contentContainerStyle={{ paddingHorizontal: 12 }}
+				contentContainerStyle={{ paddingHorizontal: 2 }}
 				scrollEnabled
 				renderItem={({ item }) => (
 					<View className="mr-8 mt-2">

@@ -4,13 +4,13 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Tabs } from "expo-router";
 const _layout = () => {
 	return (
-		<Tabs>
+		<Tabs screenOptions={{ tabBarActiveTintColor: "#FF6467" }}>
 			<Tabs.Screen
 				name="index"
 				options={{
 					title: "Home",
 					tabBarIcon: ({ color }) => (
-						<Feather name="home" size={24} color={color} />
+						<Feather name="home" size={26} color={color} />
 					),
 					headerShown: false,
 				}}
@@ -20,7 +20,7 @@ const _layout = () => {
 				options={{
 					title: "My Favorite",
 					tabBarIcon: ({ color }) => (
-						<Fontisto name="favorite" size={24} color={color} />
+						<Fontisto name="favorite" size={26} color={color} />
 					),
 				}}
 			/>
@@ -31,7 +31,7 @@ const _layout = () => {
 					tabBarIcon: ({ color }) => (
 						<MaterialCommunityIcons
 							name="cart-variant"
-							size={24}
+							size={26}
 							color={color}
 						/>
 					),
@@ -41,12 +41,8 @@ const _layout = () => {
 				name="myAccount"
 				options={{
 					title: "My Account",
-					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons
-							name="account"
-							size={size ?? 24}
-							color={color}
-						/>
+					tabBarIcon: ({ color }) => (
+						<MaterialCommunityIcons name="account" size={26} color={color} />
 					),
 				}}
 			/>

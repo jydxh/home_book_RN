@@ -10,7 +10,7 @@ export default function HomeSearch() {
 				<TextInput
 					className="border rounded-full pl-6 text-xl border-gray-300 bg-white"
 					placeholder="Start Your Search"
-					value="hello"
+					defaultValue="hello"
 				/>
 			</View>
 			{/* home category list */}
