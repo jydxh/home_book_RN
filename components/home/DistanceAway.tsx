@@ -7,6 +7,8 @@ function DistanceAway({ latLng }: { latLng: string }) {
 		latitude: number;
 		longitude: number;
 	} | null>(null);
+
+	const [distance, setDistance] = useState<number | null>(null);
 	const latLngObj = JSON.parse(latLng) as { lat: number; lng: number };
 	useEffect(() => {
 		(async () => {
@@ -17,6 +19,7 @@ function DistanceAway({ latLng }: { latLng: string }) {
 			}
 
 			let loc = await Location.getCurrentPositionAsync({});
+
 			setLocation({
 				latitude: loc.coords.latitude,
 				longitude: loc.coords.longitude,
@@ -28,15 +31,13 @@ function DistanceAway({ latLng }: { latLng: string }) {
 		if (location)
 			setDistance(
 				calculateDistance(
+					location.latitude,
+					location.longitude,
 					latLngObj.lat,
-					latLngObj.lng,
-					location?.latitude,
-					location?.longitude
+					latLngObj.lng
 				)
 			);
 	}, [location, latLngObj.lat, latLngObj.lng]);
-
-	const [distance, setDistance] = useState<number | null>(null);
 
 	return (
 		<View>

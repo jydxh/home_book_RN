@@ -1,10 +1,21 @@
 import { ProductType } from "@/constants/types";
+import { useAuth } from "@clerk/clerk-expo";
 import countries from "i18n-iso-countries";
 import { Image, Text, View } from "react-native";
 import DistanceAway from "../home/DistanceAway";
+import { FavBtnNotLogin, FavButton } from "./MyButton";
 
-export default function ProductCard({ product }: { product: ProductType }) {
+export default function ProductCard({
+	product,
+	favList,
+}: {
+	product: ProductType;
+	favList: string[];
+}) {
 	countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+	const { isSignedIn } = useAuth();
+	const isFavDefault = favList.includes(product.id);
+
 	return (
 		<View className="border border-slate-200 rounded-xl  overflow-hidden mb-4  max-w-[180px]">
 			{/* image */}
@@ -48,6 +59,14 @@ export default function ProductCard({ product }: { product: ProductType }) {
 					</View>
 					<Text className="pl-2">${product.price} per night</Text>
 				</View>
+			</View>
+			{/* fav button */}
+			<View className="absolute right-2 top-2 bg-gray-400/50 p-2 rounded">
+				{isSignedIn ? (
+					<FavButton productId={product.id} isFavDefault={isFavDefault} />
+				) : (
+					<FavBtnNotLogin />
+				)}
 			</View>
 		</View>
 	);

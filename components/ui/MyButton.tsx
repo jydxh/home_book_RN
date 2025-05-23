@@ -1,5 +1,7 @@
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
-
 export default function MyButton({
 	wrapperClassName,
 	textClassName,
@@ -30,3 +32,38 @@ export default function MyButton({
 		</TouchableOpacity>
 	);
 }
+
+export const FavButton = ({
+	productId,
+	isFavDefault,
+}: {
+	productId: string;
+	isFavDefault: boolean;
+}) => {
+	const [isFav, setIsFav] = useState(isFavDefault);
+	const toggleFavHandler = () => {};
+	return (
+		<TouchableOpacity onPress={toggleFavHandler}>
+			<MaterialIcons
+				name="favorite"
+				size={20}
+				color={isFav ? "#FB2C36" : "#F8FAFC"}
+				className="w-5 h-5"
+			/>
+		</TouchableOpacity>
+	);
+};
+
+export const FavBtnNotLogin = () => {
+	const router = useRouter();
+	return (
+		<TouchableOpacity onPress={() => router.push("/login")}>
+			<MaterialIcons
+				name="favorite"
+				size={20}
+				className="w-5 h-5"
+				color="#F8FAFC"
+			/>
+		</TouchableOpacity>
+	);
+};
