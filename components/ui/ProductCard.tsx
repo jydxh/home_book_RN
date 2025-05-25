@@ -5,8 +5,9 @@ import { Image, Text, View } from "react-native";
 import DistanceAway from "../home/DistanceAway";
 import { FavBtnNotLogin, FavButton } from "./MyButton";
 import Carousel from "./Carousel";
+import React from "react";
 
-export default function ProductCard({
+const ProductCard = React.memo(function ProductCard({
 	product,
 	favList,
 	favListLoading,
@@ -77,4 +78,6 @@ export default function ProductCard({
 			</View>
 		</View>
 	);
-}
+});
+
+export default ProductCard;

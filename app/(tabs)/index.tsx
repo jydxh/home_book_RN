@@ -1,8 +1,10 @@
 import { useFetchFavList, useFetchProducts } from "@/api/fetchProducts";
 import HomeSearch from "@/components/home/HomeSearch";
 import ProductCard from "@/components/ui/ProductCard";
+import { ProductType } from "@/constants/types";
 import { useAuth } from "@clerk/clerk-expo";
 import { useLocalSearchParams } from "expo-router";
+import { useCallback } from "react";
 
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 
@@ -11,7 +13,6 @@ export default function Home() {
 	const searchParams = useLocalSearchParams<{
 		category?: string;
 		search?: string;
-		page?: string;
 	}>();
 	// console.log("searchParams:", searchParams);
 	const { isSignedIn, isLoaded } = useAuth();
@@ -19,10 +20,12 @@ export default function Home() {
 		data: products,
 		isLoading,
 		isError,
+		hasNextPage,
+		isFetchingNextPage,
+		fetchNextPage,
 	} = useFetchProducts({
 		category: searchParams.category,
 		search: searchParams.search,
-		page: searchParams.page,
 	});
 
 	const {
@@ -30,6 +33,19 @@ export default function Home() {
 		isLoading: favListLoading,
 		isError: favListError,
 	} = useFetchFavList();
+
+	const flatData = products?.pages.flatMap(page => page?.data.data) ?? [];
+
+	const renderProductCard = useCallback(
+		({ item }: { item: ProductType }) => (
+			<ProductCard
+				product={item}
+				favList={favList || []}
+				favListLoading={favListLoading}
+			/>
+		),
+		[favList, favListLoading]
+	);
 
 	if (isLoaded)
 		return (
@@ -56,21 +72,26 @@ export default function Home() {
 								showsVerticalScrollIndicator={false}
 								columnWrapperClassName="mx-auto gap-4"
 								contentContainerStyle={{
-									paddingBottom: 130,
+									paddingBottom: 150,
 								}}
-								data={products?.data.data}
+								data={flatData}
 								keyExtractor={item => item.id}
 								numColumns={2}
 								ListEmptyComponent={() => (
 									<Text className="mx-auto my-10 text-xl">No items found</Text>
 								)}
-								renderItem={({ item }) => (
-									<ProductCard
-										product={item}
-										favList={favList || []}
-										favListLoading={favListLoading}
-									/>
-								)}
+								renderItem={renderProductCard}
+								onEndReached={() => {
+									if (hasNextPage && !isFetchingNextPage) {
+										fetchNextPage();
+									}
+								}}
+								onEndReachedThreshold={0.5}
+								ListFooterComponent={
+									isFetchingNextPage ? (
+										<ActivityIndicator size="small" color="#FF6467" />
+									) : null
+								}
 							/>
 						)}
 					</View>

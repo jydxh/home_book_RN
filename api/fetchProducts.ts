@@ -1,35 +1,35 @@
 import { backendProxyUrl } from "@/constants/baseUrls";
 import { FetchedProductsResponse } from "@/constants/types";
 import { useAuth } from "@clerk/clerk-expo";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 export const useFetchProducts = ({
 	category,
 	search,
-	page,
 }: {
 	category?: string;
 	search?: string;
-	page?: string;
 }) => {
-	return useQuery({
+	return useInfiniteQuery({
 		queryKey: ["products", category, search],
-		queryFn: async () => {
-			try {
-				const url = new URL(backendProxyUrl + "/api/products");
+		queryFn: async ({ pageParam }) => {
+			const url = new URL(backendProxyUrl + "/api/products");
 
-				if (category) url.searchParams.set("category", category);
-				if (search) url.searchParams.set("search", search);
+			if (category) url.searchParams.set("category", category);
+			if (search) url.searchParams.set("search", search);
+			if (pageParam) url.searchParams.set("page", pageParam.toString());
 
-				const response = await fetch(url);
-
-				if (!response.ok) throw new Error("error at fetching data");
-				const result = await response.json();
-
-				return result as FetchedProductsResponse;
-			} catch (error) {
-				console.log(error);
-			}
+			const response = await fetch(url);
+			if (!response.ok) throw new Error("error at fetching data");
+			const result = await response.json();
+			return result as FetchedProductsResponse;
+		},
+		initialPageParam: 1,
+		getNextPageParam: lastPage => {
+			if (!lastPage) return undefined;
+			const current = lastPage.data.currentPage;
+			const total = lastPage.data.totalPage;
+			return current < total ? Number(current) + 1 : undefined;
 		},
 	});
 };
