@@ -15,7 +15,7 @@ export default function HomeSearch() {
 
 	/* when ever the input value changed, the URL will be updated and trigger the refetching data */
 
-	const updateSearchParamRef = useRef<(value: string) => void | null>(null);
+	const updateSearchParamRef = useRef<((value: string) => void) | null>(null);
 
 	/* reason use useEffect to update the ref, is to make sure even when the resetParams changed,
 			the debounce function still be updated

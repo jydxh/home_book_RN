@@ -11,8 +11,9 @@ export default function Home() {
 	const searchParams = useLocalSearchParams<{
 		category?: string;
 		search?: string;
+		page?: string;
 	}>();
-	console.log("searchParams:", searchParams);
+	// console.log("searchParams:", searchParams);
 	const { isSignedIn, isLoaded } = useAuth();
 	const {
 		data: products,
@@ -21,6 +22,7 @@ export default function Home() {
 	} = useFetchProducts({
 		category: searchParams.category,
 		search: searchParams.search,
+		page: searchParams.page,
 	});
 
 	const {

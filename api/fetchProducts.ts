@@ -6,9 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 export const useFetchProducts = ({
 	category,
 	search,
+	page,
 }: {
 	category?: string;
 	search?: string;
+	page?: string;
 }) => {
 	return useQuery({
 		queryKey: ["products", category, search],
