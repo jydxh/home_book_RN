@@ -8,7 +8,11 @@ import { ActivityIndicator, FlatList, Text, View } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 export default function Home() {
-	const searchParams = useLocalSearchParams<{ category?: string }>();
+	const searchParams = useLocalSearchParams<{
+		category?: string;
+		search?: string;
+	}>();
+	console.log("searchParams:", searchParams);
 	const { isSignedIn, isLoaded } = useAuth();
 	const {
 		data: products,
@@ -16,6 +20,7 @@ export default function Home() {
 		isError,
 	} = useFetchProducts({
 		category: searchParams.category,
+		search: searchParams.search,
 	});
 
 	const {
@@ -49,7 +54,7 @@ export default function Home() {
 								showsVerticalScrollIndicator={false}
 								columnWrapperClassName="mx-auto gap-4"
 								contentContainerStyle={{
-									paddingBottom: 150,
+									paddingBottom: 130,
 								}}
 								data={products?.data.data}
 								keyExtractor={item => item.id}

@@ -151,7 +151,6 @@ export default function LoginComponents({
 								onPress={handleLogin}
 								text="Login"
 								textClassName="text-lg"
-								disabledClassName="bg-gray-400"
 								disabled={isSubmitting}
 							/>
 						</View>
@@ -161,9 +160,8 @@ export default function LoginComponents({
 								disabled={isSubmitting}
 								onPress={handleLoginDemoUser}
 								text="Login as Demo User"
-								wrapperClassName="bg-cyan-500"
+								bgColor="bg-cyan-400"
 								textClassName="text-lg"
-								disabledClassName="bg-gray-400"
 							/>
 						</View>
 					</View>

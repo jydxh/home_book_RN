@@ -2,16 +2,22 @@ import { backendProxyUrl } from "@/constants/baseUrls";
 import { FetchedProductsResponse } from "@/constants/types";
 import { useAuth } from "@clerk/clerk-expo";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 
-export const useFetchProducts = ({ category }: { category?: string }) => {
+export const useFetchProducts = ({
+	category,
+	search,
+}: {
+	category?: string;
+	search?: string;
+}) => {
 	return useQuery({
-		queryKey: ["products", category],
+		queryKey: ["products", category, search],
 		queryFn: async () => {
 			try {
 				const url = new URL(backendProxyUrl + "/api/products");
 
 				if (category) url.searchParams.set("category", category);
+				if (search) url.searchParams.set("search", search);
 
 				const response = await fetch(url);
 

@@ -5,12 +5,14 @@ import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 export default function MyButton({
 	wrapperClassName,
 	textClassName,
+	bgColor = "bg-sky-500",
 	onPress,
 	text,
 	disabled = false,
 	disabledClassName,
 }: {
 	wrapperClassName?: string;
+	bgColor?: string;
 	textClassName?: string;
 	onPress?: () => void;
 	text: string;
@@ -22,7 +24,7 @@ export default function MyButton({
 			disabled={disabled}
 			onPress={onPress}
 			className={`rounded py-2 flex-row justify-center items-center gap-4 ${wrapperClassName} ${
-				disabled ? `bg-gray-400 ${disabledClassName ?? ""}` : "bg-sky-500"
+				disabled ? `bg-gray-400 ${disabledClassName ?? ""}` : bgColor
 			} `}>
 			{/* spinning UI */}
 			{disabled && <ActivityIndicator size={20} color="#6A7282" />}

@@ -42,7 +42,7 @@ export default function HomeCategory() {
 					<View className="mr-8 mt-2">
 						<TouchableOpacity
 							onPress={() => handlePressCateLink(item.id)}
-							className="justify-center items-center my-2">
+							className="justify-center items-center mt-2">
 							<Text
 								className={`${
 									selectedId === item.id ? "text-red-400" : "text-gray-500"
