@@ -4,6 +4,7 @@ import countries from "i18n-iso-countries";
 import { Image, Text, View } from "react-native";
 import DistanceAway from "../home/DistanceAway";
 import { FavBtnNotLogin, FavButton } from "./MyButton";
+import Carousel from "./Carousel";
 
 export default function ProductCard({
 	product,
@@ -22,11 +23,11 @@ export default function ProductCard({
 		<View className="border border-slate-200 rounded-xl  overflow-hidden mb-4  max-w-[180px]">
 			{/* image */}
 			<View>
-				{/* later this image this be carousel */}
-				<Image
+				{/* <Image
 					source={{ uri: product.image[0].imageUrl }}
 					className="w-[180px] h-[120px]"
-				/>
+				/> */}
+				<Carousel images={product.image.map(i => i.imageUrl)} />
 			</View>
 			{/* product info */}
 			<View className="my-2">

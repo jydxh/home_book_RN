@@ -12,7 +12,7 @@ import {
 	View,
 } from "react-native";
 import MyButton from "../ui/MyButton";
-
+import { useQueryClient } from "@tanstack/react-query";
 export default function LoginComponents({
 	description = "Sign in to get more features",
 }: {
@@ -21,7 +21,7 @@ export default function LoginComponents({
 	const { signIn, setActive, isLoaded } = useSignIn();
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const router = useRouter();
-
+	const queryClient = useQueryClient();
 	const [email, setEmail] = useState("");
 	const [pwd, setPwd] = useState("");
 	const [emailError, setEmailError] = useState("");
@@ -43,6 +43,9 @@ export default function LoginComponents({
 			});
 			if (signInAttempt.status === "complete") {
 				await setActive({ session: signInAttempt.createdSessionId });
+				// after successful login:
+
+				queryClient.invalidateQueries({ queryKey: ["favList"] });
 				router.back();
 			} else {
 				// If the status isn't complete, check why. User might need to
@@ -62,7 +65,7 @@ export default function LoginComponents({
 			try {
 				setIsSubmitting(true);
 				const data = await fetchDemoUserToken();
-				console.log("result:", data);
+				//	console.log("result:", data);
 
 				if (data?.token) {
 					// create the signIn with the token
@@ -71,10 +74,11 @@ export default function LoginComponents({
 						ticket: data.token as string,
 					});
 					if (signInAttempt.status === "complete") {
-						setActive({
+						await setActive({
 							session: signInAttempt.createdSessionId,
 						});
 						console.log("Demo user signed in successfully!");
+						queryClient.invalidateQueries({ queryKey: ["favList"] });
 						router.back();
 					} else {
 						// If the sign-in attempt is not complete, check why.

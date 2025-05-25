@@ -29,9 +29,13 @@ export const useFetchProducts = ({ category }: { category?: string }) => {
 export const useFetchFavList = () => {
 	const { isSignedIn, getToken } = useAuth();
 	// console.log("isSignedIn:", isSignedIn);
+
 	return useQuery({
 		queryKey: ["favList", isSignedIn],
-		enabled: isSignedIn,
+		//  since at first component mounting, clerk might not mounted yet,
+		// and isSingedIn can be undefined, so we need to compare isSignedIn with true,
+		// to make sure only when it is true this query will be executed
+		enabled: isSignedIn === true,
 		queryFn: async () => {
 			const token = await getToken();
 			const response = await fetch(backendProxyUrl + "/api/favlist", {

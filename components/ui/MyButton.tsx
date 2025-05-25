@@ -53,7 +53,7 @@ export const FavButton = ({
 					name="favorite"
 					size={20}
 					color={isFav ? "#FB2C36" : "#F8FAFC"}
-					className="w-5 h-5"
+					className="w-6 h-6"
 				/>
 			)}
 		</TouchableOpacity>
@@ -67,7 +67,7 @@ export const FavBtnNotLogin = () => {
 			<MaterialIcons
 				name="favorite"
 				size={20}
-				className="w-5 h-5"
+				className="w-6 h-6"
 				color="#F8FAFC"
 			/>
 		</TouchableOpacity>

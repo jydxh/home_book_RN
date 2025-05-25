@@ -9,7 +9,7 @@ export default function LoginPage() {
 	if (isSignedIn) return <Redirect href={"/"} />;
 
 	return (
-		<LinearGradient className="flex-1" colors={["#96F7E4", "#14b8a6"]}>
+		<LinearGradient style={{ flex: 1 }} colors={["#96F7E4", "#14b8a6"]}>
 			<SafeAreaView className="flex-1">
 				<LoginComponents />
 			</SafeAreaView>
