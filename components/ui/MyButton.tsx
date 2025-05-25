@@ -36,20 +36,26 @@ export default function MyButton({
 export const FavButton = ({
 	productId,
 	isFavDefault,
+	favListLoading,
 }: {
 	productId: string;
 	isFavDefault: boolean;
+	favListLoading: boolean;
 }) => {
 	const [isFav, setIsFav] = useState(isFavDefault);
 	const toggleFavHandler = () => {};
 	return (
 		<TouchableOpacity onPress={toggleFavHandler}>
-			<MaterialIcons
-				name="favorite"
-				size={20}
-				color={isFav ? "#FB2C36" : "#F8FAFC"}
-				className="w-5 h-5"
-			/>
+			{favListLoading ? (
+				<ActivityIndicator size={20} color="#6A7282" />
+			) : (
+				<MaterialIcons
+					name="favorite"
+					size={20}
+					color={isFav ? "#FB2C36" : "#F8FAFC"}
+					className="w-5 h-5"
+				/>
+			)}
 		</TouchableOpacity>
 	);
 };

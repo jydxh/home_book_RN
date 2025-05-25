@@ -8,9 +8,11 @@ import { FavBtnNotLogin, FavButton } from "./MyButton";
 export default function ProductCard({
 	product,
 	favList,
+	favListLoading,
 }: {
 	product: ProductType;
 	favList: string[];
+	favListLoading: boolean;
 }) {
 	countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 	const { isSignedIn } = useAuth();
@@ -63,7 +65,11 @@ export default function ProductCard({
 			{/* fav button */}
 			<View className="absolute right-2 top-2 bg-gray-400/50 p-2 rounded">
 				{isSignedIn ? (
-					<FavButton productId={product.id} isFavDefault={isFavDefault} />
+					<FavButton
+						productId={product.id}
+						isFavDefault={isFavDefault}
+						favListLoading={favListLoading}
+					/>
 				) : (
 					<FavBtnNotLogin />
 				)}

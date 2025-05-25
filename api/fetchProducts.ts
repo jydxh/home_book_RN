@@ -2,11 +2,11 @@ import { backendProxyUrl } from "@/constants/baseUrls";
 import { FetchedProductsResponse } from "@/constants/types";
 import { useAuth } from "@clerk/clerk-expo";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const useFetchProducts = ({ category }: { category?: string }) => {
 	return useQuery({
-		queryKey: ["products"],
+		queryKey: ["products", category],
 		queryFn: async () => {
 			try {
 				const url = new URL(backendProxyUrl + "/api/products");
@@ -26,29 +26,23 @@ export const useFetchProducts = ({ category }: { category?: string }) => {
 	});
 };
 
-export const useFetchFavList = (
-	setFavList: React.Dispatch<React.SetStateAction<string[] | null>>
-) => {
+export const useFetchFavList = () => {
 	const { isSignedIn, getToken } = useAuth();
-	useEffect(() => {
-		(async () => {
-			if (isSignedIn) {
-				try {
-					const token = await getToken();
-					const response = await fetch(backendProxyUrl + "/api/favlist", {
-						headers: {
-							Authorization: `Bearer ${token}`,
-							"Content-type": "application/json",
-						},
-					});
-					if (!response.ok) throw new Error("error on fetching favList");
-					const data = await response.json();
-					if (data.data) setFavList(data.data);
-				} catch (error) {
-					console.log(error);
-					return [];
-				}
-			}
-		})();
-	}, [getToken, isSignedIn]);
+	// console.log("isSignedIn:", isSignedIn);
+	return useQuery({
+		queryKey: ["favList", isSignedIn],
+		enabled: isSignedIn,
+		queryFn: async () => {
+			const token = await getToken();
+			const response = await fetch(backendProxyUrl + "/api/favlist", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-type": "application/json",
+				},
+			});
+			if (!response.ok) throw new Error("Error on fetching favList");
+			const data = await response.json();
+			return (data.data as string[]) ?? [];
+		},
+	});
 };

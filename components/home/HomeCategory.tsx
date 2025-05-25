@@ -9,6 +9,7 @@ export default function HomeCategory() {
 		searchItem?: string;
 	}>();
 	const router = useRouter();
+	const { category: categoryParam, ...resetParams } = searchParams;
 	useEffect(() => {
 		if (searchParams.category) {
 			setSelectedId(searchParams.category);
@@ -16,10 +17,15 @@ export default function HomeCategory() {
 	}, [searchParams.category]);
 
 	const handlePressCateLink = (category: string) => {
-		router.push({
-			pathname: "/",
-			params: { ...searchParams, category },
-		});
+		if (category === categoryParam) {
+			setSelectedId(null);
+			router.push({ pathname: "/", params: resetParams });
+		} else {
+			router.push({
+				pathname: "/",
+				params: { ...searchParams, category },
+			});
+		}
 	};
 
 	return (
