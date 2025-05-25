@@ -1,7 +1,10 @@
+import { toggleFavAction } from "@/api/productsApi";
+import { useAuth } from "@clerk/clerk-expo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
+import Toast from "react-native-toast-message";
 export default function MyButton({
 	wrapperClassName,
 	textClassName,
@@ -45,10 +48,30 @@ export const FavButton = ({
 	favListLoading: boolean;
 }) => {
 	const [isFav, setIsFav] = useState(isFavDefault);
-	const toggleFavHandler = () => {};
+	const { getToken } = useAuth();
+	const [isLoading, setIsLoading] = useState(favListLoading);
+
+	const toggleFavHandler = async () => {
+		setIsLoading(true);
+		const token = await getToken();
+
+		const result = await toggleFavAction(productId, token);
+
+		setIsLoading(false);
+		if (result.status === "success") {
+			setIsFav(prev => !prev);
+			Toast.show({
+				text1Style: { fontSize: 16 },
+				bottomOffset: 80,
+				type: "success",
+				text1: `Successfully ${isFav ? "Removed" : "Added"} to favourite list`,
+				position: "bottom",
+			});
+		}
+	};
 	return (
 		<TouchableOpacity onPress={toggleFavHandler}>
-			{favListLoading ? (
+			{isLoading ? (
 				<ActivityIndicator size={20} color="#6A7282" />
 			) : (
 				<MaterialIcons

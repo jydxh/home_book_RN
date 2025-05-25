@@ -58,3 +58,25 @@ export const useFetchFavList = () => {
 		},
 	});
 };
+
+export const toggleFavAction = async (
+	productId: string,
+	token: string | null
+) => {
+	try {
+		const response = await fetch(backendProxyUrl + "/api/favlist", {
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${token}`,
+				"Content-type": "application/json",
+			},
+			body: JSON.stringify({ productId }),
+		});
+		if (!response.ok) throw new Error("error in ");
+		const result = await response.json();
+		return result as { msg: string; status: "success" };
+	} catch (error) {
+		console.log(error);
+		return { msg: "error in toggle fav", status: "failed" };
+	}
+};

@@ -1,4 +1,4 @@
-import { useFetchFavList, useFetchProducts } from "@/api/fetchProducts";
+import { useFetchFavList, useFetchProducts } from "@/api/productsApi";
 import HomeSearch from "@/components/home/HomeSearch";
 import ProductCard from "@/components/ui/ProductCard";
 import { ProductType } from "@/constants/types";
