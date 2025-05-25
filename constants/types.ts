@@ -1,10 +1,6 @@
 export type ProductType = {
 	tagline: string;
 	name: string;
-	amenities: {
-		propertyId: string;
-		amenitiesId: string;
-	}[];
 	id: string;
 	country: string;
 	price: number;
@@ -16,6 +12,13 @@ export type ProductType = {
 	}[];
 };
 
+export type ProductWithAmenitiesType = ProductType & {
+	amenities: {
+		propertyId: string;
+		amenitiesId: string;
+	}[];
+};
+
 export type FetchedProductsResponse = {
 	data: {
 		totalPage: number;
@@ -23,4 +26,8 @@ export type FetchedProductsResponse = {
 		totalCount: number;
 		data: ProductType[];
 	};
+};
+
+export type FetchedFavListDetailResponse = {
+	data: ProductType[];
 };

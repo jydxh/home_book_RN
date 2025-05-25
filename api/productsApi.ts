@@ -1,5 +1,8 @@
 import { backendProxyUrl } from "@/constants/baseUrls";
-import { FetchedProductsResponse } from "@/constants/types";
+import {
+	FetchedFavListDetailResponse,
+	FetchedProductsResponse,
+} from "@/constants/types";
 import { useAuth } from "@clerk/clerk-expo";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
@@ -72,11 +75,32 @@ export const toggleFavAction = async (
 			},
 			body: JSON.stringify({ productId }),
 		});
-		if (!response.ok) throw new Error("error in ");
+		if (!response.ok) throw new Error("error in toggle fav action");
 		const result = await response.json();
 		return result as { msg: string; status: "success" };
 	} catch (error) {
 		console.log(error);
 		return { msg: "error in toggle fav", status: "failed" };
 	}
+};
+
+export const useFetchFavListDetails = () => {
+	const { getToken, isSignedIn } = useAuth();
+
+	return useQuery({
+		queryKey: ["favListDetails", isSignedIn],
+		enabled: isSignedIn === true,
+		queryFn: async () => {
+			const token = await getToken();
+			const response = await fetch(backendProxyUrl + "/api/favlist/details", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-type": "application/json",
+				},
+			});
+			if (!response.ok) throw new Error("error at fetchFavListDetails");
+			const result = await response.json();
+			return result as FetchedFavListDetailResponse;
+		},
+	});
 };

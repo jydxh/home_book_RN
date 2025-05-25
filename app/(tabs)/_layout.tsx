@@ -1,6 +1,7 @@
 import Feather from "@expo/vector-icons/Feather";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { LinearGradient } from "expo-linear-gradient";
 import { Tabs } from "expo-router";
 const _layout = () => {
 	return (
@@ -19,6 +20,18 @@ const _layout = () => {
 				name="myFavList"
 				options={{
 					title: "My Favorite",
+					headerTitle: "My Favorite Property List",
+					headerTitleAlign: "center",
+					headerBackground: () => (
+						<LinearGradient
+							colors={["#E5E7EB", "#D6D3D1"]}
+							style={{
+								borderBottomWidth: 1,
+								borderBottomColor: "#F3F4F6",
+								flex: 1,
+							}}
+						/>
+					),
 					tabBarIcon: ({ color }) => (
 						<Fontisto name="favorite" size={26} color={color} />
 					),

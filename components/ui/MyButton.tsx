@@ -1,8 +1,9 @@
 import { toggleFavAction } from "@/api/productsApi";
 import { useAuth } from "@clerk/clerk-expo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 import Toast from "react-native-toast-message";
 export default function MyButton({
@@ -40,39 +41,50 @@ export default function MyButton({
 
 export const FavButton = ({
 	productId,
-	isFavDefault,
+	isFav,
 	favListLoading,
 }: {
 	productId: string;
-	isFavDefault: boolean;
+	isFav: boolean;
 	favListLoading: boolean;
 }) => {
-	const [isFav, setIsFav] = useState(isFavDefault);
 	const { getToken } = useAuth();
 	const [isLoading, setIsLoading] = useState(favListLoading);
+	const [pending, setPending] = useState(false);
+	const queryClient = useQueryClient();
+
+	// When isFav changes (after query revalidation), stop pending state
+	useEffect(() => {
+		setPending(false);
+	}, [isFav]);
 
 	const toggleFavHandler = async () => {
 		setIsLoading(true);
+		setPending(true);
 		const token = await getToken();
-
 		const result = await toggleFavAction(productId, token);
-
-		setIsLoading(false);
 		if (result.status === "success") {
-			setIsFav(prev => !prev);
+			queryClient.invalidateQueries({ queryKey: ["favListDetails"] });
+			queryClient.invalidateQueries({ queryKey: ["favList"] });
 			Toast.show({
-				text1Style: { fontSize: 16 },
+				text1Style: { fontSize: 14 },
 				bottomOffset: 80,
 				type: "success",
-				text1: `Successfully ${isFav ? "Removed" : "Added"} to favourite list`,
+				text1: `Successfully ${
+					isFav ? "Removed from" : "Added to"
+				}  favourite list`,
 				position: "bottom",
 			});
 		}
+		setIsLoading(false);
+		// after the isFav update, useEffect will set the pending to true
 	};
+
+	const showSpinner = isLoading || favListLoading || pending;
 	return (
-		<TouchableOpacity onPress={toggleFavHandler}>
-			{isLoading ? (
-				<ActivityIndicator size={20} color="#6A7282" />
+		<TouchableOpacity onPress={toggleFavHandler} disabled={showSpinner}>
+			{showSpinner ? (
+				<ActivityIndicator size={20} color="#4A5565" />
 			) : (
 				<MaterialIcons
 					name="favorite"

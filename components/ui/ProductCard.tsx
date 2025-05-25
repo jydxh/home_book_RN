@@ -18,7 +18,7 @@ const ProductCard = React.memo(function ProductCard({
 }) {
 	countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 	const { isSignedIn } = useAuth();
-	const isFavDefault = favList.includes(product.id);
+	const isFav = favList.includes(product.id);
 
 	return (
 		<View className="border border-slate-200 rounded-xl  overflow-hidden mb-4  max-w-[180px]">
@@ -69,7 +69,7 @@ const ProductCard = React.memo(function ProductCard({
 				{isSignedIn ? (
 					<FavButton
 						productId={product.id}
-						isFavDefault={isFavDefault}
+						isFav={isFav}
 						favListLoading={favListLoading}
 					/>
 				) : (

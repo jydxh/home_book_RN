@@ -165,6 +165,16 @@ export default function LoginComponents({
 							/>
 						</View>
 					</View>
+					{/* to home button */}
+					<View>
+						<MyButton
+							disabled={isSubmitting}
+							onPress={() => router.push("/")}
+							text="To Home"
+							wrapperClassName="mt-2"
+							textClassName="text-lg"
+						/>
+					</View>
 				</View>
 			</ScrollView>
 		</KeyboardAvoidingView>
