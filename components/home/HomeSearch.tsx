@@ -16,6 +16,9 @@ export default function HomeSearch() {
 
 	const updateSearchParamRef = useRef<(value: string) => void | null>(null);
 
+	/* reason use useEffect to update the ref, is to make sure even when the resetParams changed,
+			the debounce function still be updated
+	*/
 	useEffect(() => {
 		updateSearchParamRef.current = debounce((value: string) => {
 			router.replace({
