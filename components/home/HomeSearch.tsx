@@ -4,6 +4,7 @@ import HomeCategory from "./HomeCategory";
 import { useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { debounce } from "lodash";
+
 export default function HomeSearch() {
 	const { search, ...restParams } = useLocalSearchParams<{
 		search?: string;
