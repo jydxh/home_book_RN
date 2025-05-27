@@ -2,6 +2,7 @@ import { backendProxyUrl } from "@/constants/baseUrls";
 import {
 	FetchedFavListDetailResponse,
 	FetchedProductsResponse,
+	Property,
 } from "@/constants/types";
 import { useAuth } from "@clerk/clerk-expo";
 import {
@@ -161,6 +162,21 @@ export const useFetchFavListDetails = () => {
 			if (!response.ok) throw new Error("error at fetchFavListDetails");
 			const result = await response.json();
 			return result as FetchedFavListDetailResponse;
+		},
+	});
+};
+
+export const useFetchProductWithId = ({ productId }: { productId: string }) => {
+	return useQuery({
+		queryKey: ["productDetail", productId],
+		queryFn: async () => {
+			const response = await fetch(
+				backendProxyUrl + "/api/products/detail?productId=" + productId
+			);
+			if (!response.ok) throw new Error("error in fetch product details");
+			const result = await response.json();
+
+			return result as { data: Property };
 		},
 	});
 };
