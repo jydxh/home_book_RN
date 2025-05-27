@@ -69,7 +69,7 @@ export const FavButton = ({
 
 		Toast.show({
 			text1Style: { fontSize: 14 },
-			bottomOffset: 80,
+			bottomOffset: 120,
 			type: "success",
 			text1: `Successfully ${
 				isFav ? "Removed from" : "Added to"
