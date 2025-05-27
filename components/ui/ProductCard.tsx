@@ -7,6 +7,7 @@ import { FavBtnNotLogin, FavButton } from "./MyButton";
 import Carousel from "./Carousel";
 import React from "react";
 import { useRouter } from "expo-router";
+import CountryWithFlag from "./CountryWithFlag";
 
 const ProductCard = React.memo(function ProductCard({
 	product,
@@ -58,20 +59,7 @@ const ProductCard = React.memo(function ProductCard({
 							<DistanceAway latLng={product.latLng} />
 						</View>
 
-						<View className="justify-between flex-row px-2">
-							<Text
-								className="text-clip "
-								ellipsizeMode="tail"
-								numberOfLines={1}>
-								{countries.getName(product.country, "en", { select: "alias" })}
-							</Text>
-							<Image
-								style={{ width: 24, height: 16, marginLeft: 4 }}
-								source={{
-									uri: `https://flagcdn.com/24x18/${product.country.toLowerCase()}.png`,
-								}}
-							/>
-						</View>
+						<CountryWithFlag country={product.country} />
 						<Text className="pl-2">${product.price} per night</Text>
 					</View>
 				</View>
