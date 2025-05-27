@@ -1,4 +1,4 @@
-import { toggleFavAction } from "@/api/productsApi";
+import { useToggleFavButton } from "@/api/productsApi";
 import { useAuth } from "@clerk/clerk-expo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useQueryClient } from "@tanstack/react-query";
@@ -46,53 +46,54 @@ export const FavButton = ({
 }: {
 	productId: string;
 	isFav: boolean;
-	favListLoading: boolean;
+	favListLoading?: boolean;
 }) => {
 	const { getToken } = useAuth();
-	const [isLoading, setIsLoading] = useState(favListLoading);
-	const [pending, setPending] = useState(false);
+	//const [isLoading, setIsLoading] = useState(favListLoading);
+	//const [pending, setPending] = useState(false);
 	const queryClient = useQueryClient();
 
+	const { mutate: toggleFav, isPending } = useToggleFavButton();
+
 	// When isFav changes (after query revalidation), stop pending state
-	useEffect(() => {
-		setPending(false);
-	}, [isFav]);
+	// useEffect(() => {
+	// 	setPending(false);
+	// }, [isFav]);
 
 	const toggleFavHandler = async () => {
-		setIsLoading(true);
-		setPending(true);
+		//	setIsLoading(true);
+		//	setPending(true);
 		const token = await getToken();
-		const result = await toggleFavAction(productId, token);
-		if (result.status === "success") {
-			queryClient.invalidateQueries({ queryKey: ["favListDetails"] });
-			queryClient.invalidateQueries({ queryKey: ["favList"] });
-			Toast.show({
-				text1Style: { fontSize: 14 },
-				bottomOffset: 80,
-				type: "success",
-				text1: `Successfully ${
-					isFav ? "Removed from" : "Added to"
-				}  favourite list`,
-				position: "bottom",
-			});
-		}
-		setIsLoading(false);
+		//	const result = await toggleFavAction(productId, token);
+		toggleFav({ productId, token });
+
+		Toast.show({
+			text1Style: { fontSize: 14 },
+			bottomOffset: 80,
+			type: "success",
+			text1: `Successfully ${
+				isFav ? "Removed from" : "Added to"
+			}  favourite list`,
+			position: "bottom",
+		});
+
+		///	setIsLoading(false);
 		// after the isFav update, useEffect will set the pending to true
 	};
 
-	const showSpinner = isLoading || favListLoading || pending;
+	//	const showSpinner = isLoading || favListLoading || pending;
 	return (
-		<TouchableOpacity onPress={toggleFavHandler} disabled={showSpinner}>
-			{showSpinner ? (
+		<TouchableOpacity onPress={toggleFavHandler} disabled={isPending}>
+			{/* {isPending ? (
 				<ActivityIndicator size={20} color="#4A5565" />
-			) : (
-				<MaterialIcons
-					name="favorite"
-					size={20}
-					color={isFav ? "#FB2C36" : "#F8FAFC"}
-					className="w-6 h-6"
-				/>
-			)}
+			) : ( */}
+			<MaterialIcons
+				name="favorite"
+				size={20}
+				color={isFav ? "#FB2C36" : "#F8FAFC"}
+				className="w-6 h-6"
+			/>
+			{/* )} */}
 		</TouchableOpacity>
 	);
 };

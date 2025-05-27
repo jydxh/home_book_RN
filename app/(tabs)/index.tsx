@@ -41,7 +41,7 @@ export default function Home() {
 			<ProductCard
 				product={item}
 				favList={favList || []}
-				favListLoading={favListLoading}
+				//	favListLoading={favListLoading}
 			/>
 		),
 		[favList, favListLoading]

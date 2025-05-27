@@ -15,7 +15,7 @@ const ProductCard = React.memo(function ProductCard({
 }: {
 	product: ProductType;
 	favList: string[];
-	favListLoading: boolean;
+	favListLoading?: boolean;
 }) {
 	countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 	const { isSignedIn } = useAuth();

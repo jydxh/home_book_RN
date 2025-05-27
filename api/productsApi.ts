@@ -4,7 +4,12 @@ import {
 	FetchedProductsResponse,
 } from "@/constants/types";
 import { useAuth } from "@clerk/clerk-expo";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+	useInfiniteQuery,
+	useMutation,
+	useQuery,
+	useQueryClient,
+} from "@tanstack/react-query";
 
 export const useFetchProducts = ({
 	category,
@@ -62,26 +67,81 @@ export const useFetchFavList = () => {
 	});
 };
 
-export const toggleFavAction = async (
-	productId: string,
-	token: string | null
-) => {
-	try {
-		const response = await fetch(backendProxyUrl + "/api/favlist", {
-			method: "POST",
-			headers: {
-				Authorization: `Bearer ${token}`,
-				"Content-type": "application/json",
-			},
-			body: JSON.stringify({ productId }),
-		});
-		if (!response.ok) throw new Error("error in toggle fav action");
-		const result = await response.json();
-		return result as { msg: string; status: "success" };
-	} catch (error) {
-		console.log(error);
-		return { msg: "error in toggle fav", status: "failed" };
-	}
+const toggleFav = async ({
+	productId,
+	token,
+}: {
+	productId: string;
+	token: string | null;
+}) => {
+	const response = await fetch(backendProxyUrl + "/api/favlist", {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-type": "application/json",
+		},
+		body: JSON.stringify({ productId }),
+	});
+	if (!response.ok) throw new Error("error in toggle fav action");
+	const result = await response.json();
+	return result as { msg: string; status: "success" };
+};
+
+export const useToggleFavButton = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: toggleFav,
+
+		onMutate: async ({ productId }) => {
+			// Cancel any outgoing refetches
+			// (so they don't overwrite our optimistic update)
+			await queryClient.cancelQueries({ queryKey: ["favList"] });
+			await queryClient.cancelQueries({ queryKey: ["favListDetails"] });
+			// save the previous favlist for rollback
+			const prevFavList = queryClient.getQueryData<string[]>(["favList"]);
+			const prevFavListDetails =
+				queryClient.getQueryData<FetchedFavListDetailResponse>([
+					"favListDetails",
+				]) ?? { data: [] };
+			// optimum UI update logic below
+			queryClient.setQueryData<string[]>(["favList", true], (old = []) => {
+				return old.includes(productId)
+					? old.filter(id => id !== productId)
+					: [...old, productId];
+			});
+			queryClient.setQueryData<FetchedFavListDetailResponse>(
+				["favListDetails", true],
+				(old = { data: [] }) => {
+					const exists = old.data.some(item => item.id === productId);
+					const found = prevFavListDetails.data.find(
+						item => item.id === productId
+					);
+					return {
+						data: exists
+							? old.data.filter(item => item.id !== productId)
+							: found
+							? [...old.data, found]
+							: old.data,
+					};
+				}
+			);
+			// if the mutation fails, use the context we return	above
+			return { prevFavList, prevFavListDetails };
+		},
+		onError: (_err, _data, context) => {
+			if (context?.prevFavList && context?.prevFavListDetails) {
+				queryClient.setQueryData(["favList", true], context.prevFavList);
+				queryClient.setQueryData(
+					["favListDetails", true],
+					context.prevFavListDetails
+				);
+			}
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: ["favList", true] });
+			queryClient.invalidateQueries({ queryKey: ["favListDetails", true] });
+		},
+	});
 };
 
 export const useFetchFavListDetails = () => {

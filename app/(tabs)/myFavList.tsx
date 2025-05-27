@@ -22,7 +22,7 @@ export default function MyFavListPage() {
 		router.push("/login");
 	}
 
-	const { data, isLoading, isError } = useFetchFavListDetails();
+	const { data, isPending, isError, isLoading } = useFetchFavListDetails();
 
 	const renderProductCard = useCallback(
 		({ item }: { item: ProductType }) => {
@@ -31,11 +31,11 @@ export default function MyFavListPage() {
 				<ProductCard
 					product={item}
 					favList={favList || []}
-					favListLoading={false}
+					favListLoading={isPending}
 				/>
 			);
 		},
-		[data?.data]
+		[data?.data, isPending]
 	);
 
 	if (isSignedIn !== true) {
