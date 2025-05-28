@@ -1,6 +1,6 @@
 import { Property } from "@/constants/types";
 import React from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, Text } from "react-native";
 import Carousel from "../ui/Carousel";
 import HorizontalLine from "../ui/HorizontalLine";
 import CountryWithFlag from "../ui/CountryWithFlag";
@@ -39,6 +39,7 @@ function ProductDetail({
 					imageStyle={{ width: 30, height: 20 }}
 				/>
 			</View>
+			<Text>{JSON.stringify(product, null, 2)}</Text>
 		</>
 	);
 }

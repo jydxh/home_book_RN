@@ -48,11 +48,15 @@ export type Property = {
 	createdAt: string | Date;
 	updatedAt: string | Date;
 	userId: string;
+	rating: {
+		rating: string;
+		count: number;
+	};
 	image: {
 		imageUrl: string;
 		id: string;
 	}[];
-	reviews: any[]; //  might want to define a proper Review interface
+	reviews: Review[];
 	user: {
 		id: number;
 		clerkId: string;
@@ -68,24 +72,26 @@ export type Property = {
 		updateAt: string | Date;
 		role: string;
 	};
-	amenities: any[]; //  might want to define a proper Amenity interface
-	orders: {
-		id: string;
-		userId: string;
-		propertyId: string;
-		orderTotal: number;
-		totalNight: number;
-		checkIn: string | Date;
-		checkOut: string | Date;
-		createdAt: string | Date;
-		updatedAt: string | Date;
-		paymentStatus: boolean;
-		orderStatus: string; // Consider using a union type for possible statuses
-	}[];
+	amenities: Amenity[];
+	orders: Order[];
 };
 
-// If you want more specific types for some fields, you could define:
-export type OrderStatus = "CHECKED" | "PENDING" | "CANCELLED" | "COMPLETED"; // etc.
+export type Review = {
+	id: string;
+	rating: number;
+	comment: string;
+	createdAt: string | Date;
+	updateAt: string | Date;
+	userId: string;
+	propertyId: string;
+};
+
+export type Amenity = {
+	propertyId: string;
+	amenitiesId: string;
+};
+
+export type OrderStatus = "CHECKED" | "PENDING" | "CANCELLED";
 
 export type User = {
 	id: number;
