@@ -1,16 +1,20 @@
-import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, ScrollView, Text } from "react-native";
 import React, { useEffect } from "react";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useFetchProductWithId } from "@/api/productsApi";
+import { useFetchFavList, useFetchProductWithId } from "@/api/productsApi";
 import ProductDetail from "@/components/productDetail/ProductDetail";
-import { HeaderTitle } from "@react-navigation/elements";
 
 export default function ProductDetailPage() {
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { data, isLoading, isError } = useFetchProductWithId({ productId: id });
 	const navigation = useNavigation();
+	const {
+		data: favList,
+		isLoading: favListLoading,
+		isError: favListError,
+	} = useFetchFavList();
 
 	useEffect(() => {
 		if (data) {
@@ -31,12 +35,12 @@ export default function ProductDetailPage() {
 			});
 		} else {
 			navigation.setOptions({
-				title: "loading...",
+				headerTitle: () => <ActivityIndicator color="#99A1AE" />,
 			});
 		}
 	}, [navigation, data]);
 
-	if (isLoading)
+	if (isLoading || favListLoading)
 		return (
 			<SafeAreaView style={{ flex: 1 }}>
 				<ActivityIndicator
@@ -46,12 +50,24 @@ export default function ProductDetailPage() {
 				/>
 			</SafeAreaView>
 		);
-	if (data)
+	if (isError || favListError)
+		return (
+			<SafeAreaView
+				style={{ flex: 1, paddingHorizontal: 20, paddingVertical: 10 }}>
+				<Text className="text-xl justify-center items-center">
+					An error occurred while fetching data, please try again
+				</Text>
+			</SafeAreaView>
+		);
+	if (data && favList)
 		return (
 			<SafeAreaView style={{ flex: 1 }} edges={["bottom", "left", "right"]}>
 				<LinearGradient colors={["#E5E7EB", "#D4D4D4"]} className="flex-1">
 					<ScrollView className="px-2">
-						<ProductDetail product={data.data} />
+						<ProductDetail
+							product={data.data}
+							isFav={favList.includes(data.data.id)}
+						/>
 					</ScrollView>
 				</LinearGradient>
 			</SafeAreaView>

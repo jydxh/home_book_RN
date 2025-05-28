@@ -12,11 +12,9 @@ import CountryWithFlag from "./CountryWithFlag";
 const ProductCard = React.memo(function ProductCard({
 	product,
 	favList,
-	favListLoading,
 }: {
 	product: ProductType;
 	favList: string[];
-	favListLoading?: boolean;
 }) {
 	countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 	const { isSignedIn } = useAuth();
@@ -26,10 +24,6 @@ const ProductCard = React.memo(function ProductCard({
 		<View className="border border-slate-200 rounded-xl  overflow-hidden mb-4  max-w-[180px]">
 			{/* image */}
 			<View>
-				{/* <Image
-					source={{ uri: product.image[0].imageUrl }}
-					className="w-[180px] h-[120px]"
-				/> */}
 				<Carousel images={product.image.map(i => i.imageUrl)} />
 			</View>
 			{/* product info */}
@@ -67,11 +61,7 @@ const ProductCard = React.memo(function ProductCard({
 			{/* fav button */}
 			<View className="absolute right-2 top-2 bg-gray-400/50 p-2 rounded">
 				{isSignedIn ? (
-					<FavButton
-						productId={product.id}
-						isFav={isFav}
-						favListLoading={favListLoading}
-					/>
+					<FavButton productId={product.id} isFav={isFav} />
 				) : (
 					<FavBtnNotLogin />
 				)}

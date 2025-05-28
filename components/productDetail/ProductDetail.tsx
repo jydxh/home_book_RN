@@ -1,17 +1,24 @@
 import { Property } from "@/constants/types";
 import React from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Dimensions } from "react-native";
 import Carousel from "../ui/Carousel";
 import HorizontalLine from "../ui/HorizontalLine";
 import CountryWithFlag from "../ui/CountryWithFlag";
+import { FavButton } from "../ui/MyButton";
 
 const { width } = Dimensions.get("window");
 
-function ProductDetail({ product }: { product: Property }) {
+function ProductDetail({
+	product,
+	isFav,
+}: {
+	product: Property;
+	isFav: boolean;
+}) {
 	return (
 		<>
-			<View className="mx-auto mt-8">
-				<Text className="text-2xl font-semibold">{product.name}</Text>
+			<View className="mt-8 ml-4">
+				<FavButton productId={product.id} isFav={isFav} withText={true} />
 			</View>
 			<HorizontalLine />
 			{/* carousel */}

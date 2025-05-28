@@ -38,13 +38,9 @@ export default function Home() {
 
 	const renderProductCard = useCallback(
 		({ item }: { item: ProductType }) => (
-			<ProductCard
-				product={item}
-				favList={favList || []}
-				//	favListLoading={favListLoading}
-			/>
+			<ProductCard product={item} favList={favList || []} />
 		),
-		[favList, favListLoading]
+		[favList]
 	);
 
 	if (isLoaded)

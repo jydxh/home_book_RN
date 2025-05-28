@@ -42,29 +42,19 @@ export default function MyButton({
 export const FavButton = ({
 	productId,
 	isFav,
-	favListLoading,
+	withText = false,
 }: {
 	productId: string;
 	isFav: boolean;
-	favListLoading?: boolean;
+	withText?: boolean;
 }) => {
 	const { getToken } = useAuth();
-	//const [isLoading, setIsLoading] = useState(favListLoading);
-	//const [pending, setPending] = useState(false);
-	const queryClient = useQueryClient();
 
 	const { mutate: toggleFav, isPending } = useToggleFavButton();
 
-	// When isFav changes (after query revalidation), stop pending state
-	// useEffect(() => {
-	// 	setPending(false);
-	// }, [isFav]);
-
 	const toggleFavHandler = async () => {
-		//	setIsLoading(true);
-		//	setPending(true);
 		const token = await getToken();
-		//	const result = await toggleFavAction(productId, token);
+
 		toggleFav({ productId, token });
 
 		Toast.show({
@@ -76,24 +66,24 @@ export const FavButton = ({
 			}  favourite list`,
 			position: "bottom",
 		});
-
-		///	setIsLoading(false);
-		// after the isFav update, useEffect will set the pending to true
 	};
 
-	//	const showSpinner = isLoading || favListLoading || pending;
 	return (
-		<TouchableOpacity onPress={toggleFavHandler} disabled={isPending}>
-			{/* {isPending ? (
-				<ActivityIndicator size={20} color="#4A5565" />
-			) : ( */}
+		<TouchableOpacity
+			onPress={toggleFavHandler}
+			disabled={isPending}
+			className="flex-row gap-x-2 items-center">
 			<MaterialIcons
 				name="favorite"
 				size={20}
 				color={isFav ? "#FB2C36" : "#F8FAFC"}
 				className="w-6 h-6"
 			/>
-			{/* )} */}
+			{withText && (
+				<Text className="underline text-xl">
+					{isFav ? "Remove from List" : "Add to List"}
+				</Text>
+			)}
 		</TouchableOpacity>
 	);
 };
