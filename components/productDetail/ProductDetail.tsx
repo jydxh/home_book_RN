@@ -1,10 +1,12 @@
 import { Property } from "@/constants/types";
 import React from "react";
-import { View, Dimensions, Text } from "react-native";
+import { View, Dimensions, Text, Image } from "react-native";
 import Carousel from "../ui/Carousel";
 import HorizontalLine from "../ui/HorizontalLine";
 import CountryWithFlag from "../ui/CountryWithFlag";
 import { FavButton } from "../ui/MyButton";
+import calculateYearDiff from "@/utils/calculateYearDiff";
+import ProductDescription from "./ProductDescription";
 
 const { width } = Dimensions.get("window");
 
@@ -38,7 +40,40 @@ function ProductDetail({
 					textClassName="text-xl font-semibold"
 					imageStyle={{ width: 30, height: 20 }}
 				/>
+				{/* room info */}
+				<Text className="mt-2 ml-2 text-lg">
+					{product.bedrooms} bedroom{product.bedrooms > 1 && "s"} &middot;{" "}
+					{product.guests} guest{product.guests > 1 && "s"} &middot;{" "}
+					{product.baths} bath {product.baths > 1 && "s"}
+				</Text>
+				{/* host info */}
+				<View className="flex-row justify-start gap-x-4 mt-4">
+					<Image
+						source={{ uri: product.user.profileImage }}
+						width={55}
+						height={55}
+						className="rounded-full ml-2"
+					/>
+					<View className="justify-center gap-y-1">
+						<Text className="text-lg font-semibold">
+							Hosted by {product.user.userName}
+						</Text>
+						<Text className="text-lg font-light">
+							SuperHost &middot; {calculateYearDiff(product.user.createAt)}{" "}
+							hosting
+						</Text>
+					</View>
+				</View>
+				<HorizontalLine />
+				{/* product description */}
+				<ProductDescription description={product.description} />
 			</View>
+
+			{/*below to be deleted once finish this page */}
+			<HorizontalLine />
+			<HorizontalLine />
+			<HorizontalLine />
+			<HorizontalLine />
 			<Text>{JSON.stringify(product, null, 2)}</Text>
 		</>
 	);
