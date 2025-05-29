@@ -115,10 +115,15 @@ export type Order = {
 	propertyId: string;
 	orderTotal: number;
 	totalNight: number;
-	checkIn: string | Date;
-	checkOut: string | Date;
-	createdAt: string | Date;
-	updatedAt: string | Date;
+	checkIn: Date;
+	checkOut: Date;
+	createdAt: Date;
+	updatedAt: Date;
 	paymentStatus: boolean;
 	orderStatus: OrderStatus;
+};
+
+export type Booking = {
+	checkIn: Date;
+	checkOut: Date;
 };

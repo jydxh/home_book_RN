@@ -1,9 +1,9 @@
 import { useToggleFavButton } from "@/api/productsApi";
 import { useAuth } from "@clerk/clerk-expo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useQueryClient } from "@tanstack/react-query";
+
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 import Toast from "react-native-toast-message";
 export default function MyButton({
@@ -14,6 +14,7 @@ export default function MyButton({
 	text,
 	disabled = false,
 	disabledClassName,
+	spinning,
 }: {
 	wrapperClassName?: string;
 	bgColor?: string;
@@ -22,6 +23,7 @@ export default function MyButton({
 	text: string;
 	disabled?: boolean;
 	disabledClassName?: string;
+	spinning?: boolean;
 }) {
 	return (
 		<TouchableOpacity
@@ -31,7 +33,7 @@ export default function MyButton({
 				disabled ? `bg-gray-400 ${disabledClassName ?? ""}` : bgColor
 			} `}>
 			{/* spinning UI */}
-			{disabled && <ActivityIndicator size={20} color="#6A7282" />}
+			{spinning && <ActivityIndicator size={20} color="#6A7282" />}
 			<Text className={`text-center font-semibold text-white ${textClassName}`}>
 				{text}
 			</Text>

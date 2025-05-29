@@ -7,6 +7,10 @@ import CountryWithFlag from "../ui/CountryWithFlag";
 import { FavButton } from "../ui/MyButton";
 import calculateYearDiff from "@/utils/calculateYearDiff";
 import ProductDescription from "./ProductDescription";
+import Amenities from "./Amenities";
+import LocationAndMap from "./LocationAndMap";
+import Booking from "./Booking";
+import BookingComponent from "./Booking";
 
 const { width } = Dimensions.get("window");
 
@@ -17,6 +21,11 @@ function ProductDetail({
 	product: Property;
 	isFav: boolean;
 }) {
+	const latLngObject = JSON.parse(product.latLng) as {
+		lat: number;
+		lng: number;
+	};
+
 	return (
 		<>
 			<View className="mt-8 ml-4">
@@ -64,17 +73,43 @@ function ProductDetail({
 						</Text>
 					</View>
 				</View>
-				<HorizontalLine />
-				{/* product description */}
+			</View>
+			<HorizontalLine />
+			{/* product description */}
+			<View className="px-2">
 				<ProductDescription description={product.description} />
 			</View>
 
-			{/*below to be deleted once finish this page */}
 			<HorizontalLine />
+
+			{/* Amenities */}
+			<View className="px-2">
+				<Amenities amenitiesId={product.amenities.map(a => a.amenitiesId)} />
+			</View>
 			<HorizontalLine />
+			{/* location and map */}
+			<View className="px-2">
+				<LocationAndMap
+					lat={latLngObject.lat}
+					lng={latLngObject.lng}
+					address={product.address}
+				/>
+			</View>
 			<HorizontalLine />
-			<HorizontalLine />
-			<Text>{JSON.stringify(product, null, 2)}</Text>
+			{/* booking  */}
+			<View className="px-2">
+				<BookingComponent
+					bookings={product.orders.map(o => ({
+						checkIn: o.checkIn,
+						checkOut: o.checkOut,
+					}))}
+					image={product.image[0].imageUrl}
+					price={product.price}
+					productId={product.id}
+					rating={Number(product.rating.rating)}
+					totalReview={product.reviews.length}
+				/>
+			</View>
 		</>
 	);
 }

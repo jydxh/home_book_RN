@@ -63,7 +63,7 @@ export default function ProductDetailPage() {
 		return (
 			<SafeAreaView style={{ flex: 1 }} edges={["bottom", "left", "right"]}>
 				<LinearGradient colors={["#E5E7EB", "#D4D4D4"]} className="flex-1">
-					<ScrollView className="px-2">
+					<ScrollView className="px-2 mb-2">
 						<ProductDetail
 							product={data.data}
 							isFav={favList.includes(data.data.id)}
