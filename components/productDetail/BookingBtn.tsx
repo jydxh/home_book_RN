@@ -9,6 +9,7 @@ export default function BookingBtn({
 	text,
 	bgColor,
 	disabledClassName,
+	disabled,
 }: {
 	dateRange?: any;
 	loadingIndicator?: boolean;
@@ -18,13 +19,14 @@ export default function BookingBtn({
 	text: string;
 	disabledClassName?: string;
 	bgColor?: string;
+	disabled: boolean;
 }) {
 	return (
 		<TouchableOpacity
-			disabled={!dateRange}
+			disabled={disabled}
 			onPress={onPress}
 			className={`rounded py-2 flex-row justify-center items-center gap-4 ${wrapperClassName} ${
-				!dateRange ? `bg-gray-400 ${disabledClassName ?? ""}` : bgColor
+				!disabled ? `bg-gray-400 ${disabledClassName ?? ""}` : bgColor
 			} `}>
 			{/* spinning UI */}
 			{loadingIndicator && <ActivityIndicator size={20} color="#6A7282" />}

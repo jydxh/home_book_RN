@@ -94,13 +94,18 @@ export default function BookingComponent({
 
 			<View className="my-2 gap-y-2">
 				<MyButton
-					text="pick a date range"
+					text={
+						selectedRange.start && selectedRange.end
+							? `From: ${selectedRange.start} -- To: ${selectedRange.end}`
+							: "pick a date range"
+					}
 					onPress={() => setShowCalendar(true)}
 				/>
 
 				<BookingBtn
+					disabled={!!selectedRange.start && !!selectedRange.end}
 					onPress={handlePressBooking}
-					dateRange={true}
+					dateRange={false}
 					text="Booking the Date"
 					bgColor="bg-red-400"
 				/>

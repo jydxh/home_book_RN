@@ -77,6 +77,10 @@ export default function BookingCalendar({
 			}
 
 			if (validRange) {
+				// if the start day same as end end
+				if (moment(start).isSame(day.dateString, "day")) {
+					return;
+				}
 				const newRange = generateDateRange(start, day.dateString);
 				setSelectedRange({ start, end: day.dateString });
 				setMarkedDates({
@@ -100,6 +104,11 @@ export default function BookingCalendar({
 		if (start.isAfter(end)) {
 			[start, end] = [end, start];
 		}
+
+		// Prevent same-day selection
+		if (start.isSame(end, "day")) {
+			return range;
+		}
 		let current = moment(start);
 
 		const startStr = start.format("YYYY-MM-DD");
@@ -118,12 +127,13 @@ export default function BookingCalendar({
 			};
 			current.add(1, "day");
 		}
-
+		console.log("range:", range);
 		return range;
 	};
 
 	const handleConfirm = () => {
 		console.log("selectedRange:", selectedRange);
+		setShowModal(false);
 	};
 
 	return (
@@ -154,6 +164,7 @@ export default function BookingCalendar({
 							onPress={() => {
 								setMarkedDates(generateDisabledRanges(disabledDateRange)); // reset to default markedDate
 								setShowModal(false);
+								setSelectedRange({ start: null, end: null });
 							}}
 							wrapperClassName="w-20"
 							bgColor="bg-red-400"
