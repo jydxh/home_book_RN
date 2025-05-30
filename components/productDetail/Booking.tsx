@@ -1,16 +1,19 @@
-import { View, Text } from "react-native";
+import { View, Text, Modal } from "react-native";
 
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { type Booking } from "@/constants/types";
-import DateTimePicker, {
-	DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
+// import DateTimePicker, {
+// 	DateTimePickerEvent,
+// } from "@react-native-community/datetimepicker";
+import { Calendar } from "react-native-calendars";
 import BookingBtn from "./BookingBtn";
 import { useAuth } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import MyButton from "../ui/MyButton";
 import { useState } from "react";
 import moment from "moment";
+import BookingCalendar from "./BookingCalendar";
+import { generateDisabledRanges } from "@/utils/generateDisabledRanges";
 
 export default function BookingComponent({
 	bookings,
@@ -19,6 +22,7 @@ export default function BookingComponent({
 	productId,
 	rating,
 	totalReview,
+	disabledDateRange,
 }: {
 	productId: string;
 	price: number;
@@ -26,39 +30,29 @@ export default function BookingComponent({
 	totalReview: number;
 	rating: number;
 	image: string;
+	disabledDateRange: { start: string; end: string }[];
 }) {
 	const { isSignedIn } = useAuth();
-	const [showStartDate, setShowStartDate] = useState(false);
-	const [showEndDate, setShowEndDate] = useState(false);
-	const [startDate, setStartDate] = useState<Date | null>(null);
-	const [endDate, setEndDate] = useState<Date | null>(null);
+	const [selectedRange, setSelectedRange] = useState<{
+		start: string | null;
+		end: string | null;
+	}>({
+		start: null,
+		end: null,
+	});
+	const [showCalendar, setShowCalendar] = useState(false);
+	/* this range will get from parent later, now just use fixed value */
+
+	const [markedDates, setMarkedDates] = useState(
+		generateDisabledRanges(disabledDateRange)
+	);
+
 	const router = useRouter();
 
-	const maxDate = new Date();
+	let maxDate: Date | string = new Date();
 	maxDate.setMonth(maxDate.getMonth() + 3);
-
-	const onDatePickerChange = (
-		_event: DateTimePickerEvent,
-		selectedDate: Date | undefined,
-		mode: "start" | "end"
-	) => {
-		if (_event.type === "dismissed") {
-			if (mode === "start") setShowStartDate(false);
-			if (mode === "end") setShowEndDate(false);
-			return;
-		}
-		if (selectedDate) {
-			const currentDate = selectedDate;
-			if (mode === "start") {
-				setShowStartDate(false);
-				setStartDate(currentDate);
-			}
-			if (mode === "end") {
-				setShowEndDate(false);
-				setEndDate(currentDate);
-			}
-		}
-	};
+	maxDate = maxDate.toISOString().split("T")[0];
+	const minDate = new Date().toISOString().split("T")[0];
 
 	const handlePressBooking = () => {
 		if (!isSignedIn) return router.push("/login");
@@ -85,43 +79,23 @@ export default function BookingComponent({
 				Pick up a start date and end date
 			</Text>
 			{/* date picker */}
-			{showStartDate && (
-				<DateTimePicker
-					onTouchCancel={() => setStartDate(null)}
-					maximumDate={maxDate}
-					minimumDate={new Date()}
-					value={startDate ?? new Date()}
-					mode={"date"}
-					onChange={(event, selectedDate) =>
-						onDatePickerChange(event, selectedDate, "start")
-					}
-				/>
-			)}
-			{showEndDate && (
-				<DateTimePicker
-					onTouchCancel={() => setStartDate(null)}
-					maximumDate={maxDate}
-					minimumDate={startDate ?? new Date()}
-					value={endDate ?? new Date()}
-					mode={"date"}
-					onChange={(event, selectedDate) =>
-						onDatePickerChange(event, selectedDate, "end")
-					}
-				/>
-			)}
+
+			<BookingCalendar
+				maxDate={maxDate}
+				minDate={minDate}
+				showModal={showCalendar}
+				setShowModal={setShowCalendar}
+				disabledDateRange={disabledDateRange}
+				selectedRange={selectedRange}
+				setSelectedRange={setSelectedRange}
+				markedDates={markedDates}
+				setMarkedDates={setMarkedDates}
+			/>
+
 			<View className="my-2 gap-y-2">
 				<MyButton
-					text={`📅 Start Date:  ${
-						startDate ? moment(startDate).format("MMM D, YYYY") : "--"
-					}`}
-					onPress={() => setShowStartDate(true)}
-				/>
-				<MyButton
-					disabled={!startDate}
-					text={`📅 End Date:  ${
-						endDate ? moment(endDate).format("MMM D, YYYY") : "--"
-					}`}
-					onPress={() => setShowEndDate(true)}
+					text="pick a date range"
+					onPress={() => setShowCalendar(true)}
 				/>
 
 				<BookingBtn

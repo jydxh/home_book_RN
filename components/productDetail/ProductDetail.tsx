@@ -11,6 +11,7 @@ import Amenities from "./Amenities";
 import LocationAndMap from "./LocationAndMap";
 import Booking from "./Booking";
 import BookingComponent from "./Booking";
+import moment from "moment";
 
 const { width } = Dimensions.get("window");
 
@@ -108,6 +109,10 @@ function ProductDetail({
 					productId={product.id}
 					rating={Number(product.rating.rating)}
 					totalReview={product.reviews.length}
+					disabledDateRange={product.orders.map(o => ({
+						start: moment(o.checkIn).format("YYYY-MM-DD"),
+						end: moment(o.checkOut).subtract(1, "day").format("YYYY-MM-DD"), // subtract end day by 1, so the last night be can selected by other user
+					}))}
 				/>
 			</View>
 		</>
