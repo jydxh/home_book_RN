@@ -96,7 +96,7 @@ export default function BookingComponent({
 				<MyButton
 					text={
 						selectedRange.start && selectedRange.end
-							? `From: ${selectedRange.start} -- To: ${selectedRange.end}`
+							? `From: ${selectedRange.start}   To: ${selectedRange.end}`
 							: "pick a date range"
 					}
 					onPress={() => setShowCalendar(true)}

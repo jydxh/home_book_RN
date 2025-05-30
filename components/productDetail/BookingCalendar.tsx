@@ -17,8 +17,8 @@ export default function BookingCalendar({
 	setSelectedRange,
 }: {
 	showModal: boolean;
-	minDate: string;
-	maxDate: string;
+	minDate?: string;
+	maxDate?: string;
 	setShowModal: (arg: boolean) => void;
 	disabledDateRange: { start: string; end: string }[];
 	selectedRange: { start: string | null; end: string | null };
@@ -31,7 +31,7 @@ export default function BookingCalendar({
 	markedDates: MarkedDates;
 	setMarkedDates: React.Dispatch<React.SetStateAction<MarkedDates>>;
 }) {
-	const isDateInDisabledRange = (dateString: DateData["dateString"]) => {
+	const isDateInDisabledRange = (dateString: string) => {
 		const date = moment(dateString);
 		return disabledDateRange.some(range => {
 			return date.isBetween(range.start, range.end, null, "[]"); // inclusive
@@ -134,10 +134,15 @@ export default function BookingCalendar({
 	const handleConfirm = () => {
 		console.log("selectedRange:", selectedRange);
 		setShowModal(false);
+		/* add the open confirm modal logic below */
 	};
 
 	return (
-		<Modal visible={showModal} animationType="fade" transparent={true}>
+		<Modal
+			visible={showModal}
+			animationType="fade"
+			transparent={false}
+			backdropColor={"rgb(11,11,11,0.1)"}>
 			<View className="flex-1 justify-center">
 				<View className="bg-white pb-4">
 					<Calendar
