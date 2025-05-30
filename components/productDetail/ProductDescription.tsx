@@ -21,7 +21,8 @@ function ProductDescription({ description }: { description: string }) {
 			{isMoreChars && (
 				<MyButton
 					bgColor="transparent"
-					textClassName="text-lg underline text-red-600"
+					textClassName="text-lg underline"
+					textColorClass="text-red-500"
 					wrapperClassName="mx-auto block mt-2 px-2 py-1"
 					onPress={() => setIsShowMore(prev => !prev)}
 					text={isShowMore ? "Show Less" : "Show More"}

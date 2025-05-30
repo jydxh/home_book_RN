@@ -15,6 +15,7 @@ export default function MyButton({
 	disabled = false,
 	disabledClassName,
 	spinning,
+	textColorClass = "text-white",
 }: {
 	wrapperClassName?: string;
 	bgColor?: string;
@@ -24,6 +25,7 @@ export default function MyButton({
 	disabled?: boolean;
 	disabledClassName?: string;
 	spinning?: boolean;
+	textColorClass?: string;
 }) {
 	return (
 		<TouchableOpacity
@@ -34,7 +36,8 @@ export default function MyButton({
 			} `}>
 			{/* spinning UI */}
 			{spinning && <ActivityIndicator size={20} color="#6A7282" />}
-			<Text className={`text-center font-semibold text-white ${textClassName}`}>
+			<Text
+				className={`text-center font-semibold ${textColorClass} ${textClassName}`}>
 				{text}
 			</Text>
 		</TouchableOpacity>

@@ -152,12 +152,14 @@ export default function LoginComponents({
 								text="Login"
 								textClassName="text-lg"
 								disabled={isSubmitting}
+								spinning={isSubmitting}
 							/>
 						</View>
 						{/* Login as demo user button */}
 						<View>
 							<MyButton
 								disabled={isSubmitting}
+								spinning={isSubmitting}
 								onPress={handleLoginDemoUser}
 								text="Login as Demo User"
 								bgColor="bg-cyan-400"
@@ -169,6 +171,7 @@ export default function LoginComponents({
 					<View>
 						<MyButton
 							disabled={isSubmitting}
+							spinning={isSubmitting}
 							onPress={() => router.push("/")}
 							text="To Home"
 							wrapperClassName="mt-2"
