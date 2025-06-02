@@ -1,37 +1,42 @@
-import { View, Text, Modal } from "react-native";
+import { Text, View } from "react-native";
 
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { type Booking } from "@/constants/types";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 // import DateTimePicker, {
 // 	DateTimePickerEvent,
 // } from "@react-native-community/datetimepicker";
-import { Calendar } from "react-native-calendars";
-import BookingBtn from "./BookingBtn";
+import { generateDisabledRanges } from "@/utils/generateDisabledRanges";
 import { useAuth } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
-import MyButton from "../ui/MyButton";
 import { useState } from "react";
-import moment from "moment";
+import MyButton from "../ui/MyButton";
+import BookingBtn from "./BookingBtn";
 import BookingCalendar from "./BookingCalendar";
-import { generateDisabledRanges } from "@/utils/generateDisabledRanges";
+import ConfirmBook from "./ConfirmBook";
 
 export default function BookingComponent({
 	bookings,
 	image,
 	price,
 	productId,
-	rating,
+	rate,
 	totalReview,
+	name,
 	disabledDateRange,
 }: {
 	productId: string;
 	price: number;
 	bookings: Booking[];
 	totalReview: number;
-	rating: number;
+	rate: {
+		rating: string;
+		count: number;
+	};
 	image: string;
+	name: string;
 	disabledDateRange: { start: string; end: string }[];
 }) {
+	console.log("disabledDateRange", disabledDateRange);
 	const { isSignedIn } = useAuth();
 	const [selectedRange, setSelectedRange] = useState<{
 		start: string | null;
@@ -41,7 +46,7 @@ export default function BookingComponent({
 		end: null,
 	});
 	const [showCalendar, setShowCalendar] = useState(false);
-	/* this range will get from parent later, now just use fixed value */
+	const [showConfirmBook, setShowConfirmBook] = useState(false);
 
 	const [markedDates, setMarkedDates] = useState(
 		generateDisabledRanges(disabledDateRange)
@@ -57,6 +62,7 @@ export default function BookingComponent({
 	const handlePressBooking = () => {
 		if (!isSignedIn) return router.push("/login");
 		console.log("opening the confirm modal");
+		setShowConfirmBook(true);
 	};
 	return (
 		<View
@@ -91,6 +97,16 @@ export default function BookingComponent({
 				markedDates={markedDates}
 				setMarkedDates={setMarkedDates}
 			/>
+			<ConfirmBook
+				setShowConfirmBook={setShowConfirmBook}
+				showConfirmBook={showConfirmBook}
+				imageUrl={image}
+				price={price}
+				propertyName={name}
+				rate={rate}
+				selectedRange={selectedRange}
+				productId={productId}
+			/>
 
 			<View className="my-2 gap-y-2">
 				<MyButton
@@ -103,9 +119,8 @@ export default function BookingComponent({
 				/>
 
 				<BookingBtn
-					disabled={!!selectedRange.start && !!selectedRange.end}
+					disabled={!selectedRange.start || !selectedRange.end}
 					onPress={handlePressBooking}
-					dateRange={false}
 					text="Booking the Date"
 					bgColor="bg-red-400"
 				/>

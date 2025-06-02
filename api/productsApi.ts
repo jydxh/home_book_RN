@@ -180,3 +180,50 @@ export const useFetchProductWithId = ({ productId }: { productId: string }) => {
 		},
 	});
 };
+
+export const useBookingProperty = ({
+	productId,
+	checkIn,
+	checkOut,
+	onError,
+	onSettled,
+	onSuccess,
+}: {
+	productId: string;
+	checkIn: string;
+	checkOut: string;
+	onSuccess?: (data: { bookingId: string }) => void;
+	onError?: (error: unknown) => void;
+	onSettled?: () => void;
+}) => {
+	const { getToken } = useAuth();
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: async () => {
+			const token = await getToken();
+			const response = await fetch(backendProxyUrl + "/api/products/booking", {
+				method: "POST",
+				body: JSON.stringify({ productId, checkIn, checkOut }),
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-type": "application/json",
+				},
+			});
+			if (!response.ok) throw new Error("error in booking property");
+			const result = (await response.json()) as { bookingId: string };
+			console.log("result:", result);
+			return result;
+		},
+		onSuccess: (data, _variables, _context) => {
+			queryClient.invalidateQueries({ queryKey: ["productDetail", productId] });
+			onSuccess?.(data);
+		},
+		onError: (error, _variables, _context) => {
+			onError?.(error);
+		},
+		onSettled: () => {
+			onSettled?.();
+		},
+	});
+};

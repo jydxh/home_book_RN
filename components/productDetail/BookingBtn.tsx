@@ -1,7 +1,6 @@
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 
 export default function BookingBtn({
-	dateRange,
 	loadingIndicator,
 	onPress,
 	wrapperClassName,
@@ -11,7 +10,6 @@ export default function BookingBtn({
 	disabledClassName,
 	disabled,
 }: {
-	dateRange?: any;
 	loadingIndicator?: boolean;
 	onPress: () => void;
 	wrapperClassName?: string;
@@ -26,7 +24,7 @@ export default function BookingBtn({
 			disabled={disabled}
 			onPress={onPress}
 			className={`rounded py-2 flex-row justify-center items-center gap-4 ${wrapperClassName} ${
-				!disabled ? `bg-gray-400 ${disabledClassName ?? ""}` : bgColor
+				disabled ? `bg-gray-400 ${disabledClassName ?? ""}` : bgColor
 			} `}>
 			{/* spinning UI */}
 			{loadingIndicator && <ActivityIndicator size={20} color="#6A7282" />}

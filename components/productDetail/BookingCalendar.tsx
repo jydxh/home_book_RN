@@ -1,10 +1,10 @@
-import { View, Modal } from "react-native";
-import React from "react";
-import { Calendar, DateData } from "react-native-calendars";
-import MyButton from "../ui/MyButton";
-import moment from "moment";
 import { generateDisabledRanges } from "@/utils/generateDisabledRanges";
+import moment from "moment";
+import React from "react";
+import { Modal, View } from "react-native";
+import { Calendar, DateData } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
+import MyButton from "../ui/MyButton";
 export default function BookingCalendar({
 	showModal,
 	maxDate,
@@ -81,8 +81,15 @@ export default function BookingCalendar({
 				if (moment(start).isSame(day.dateString, "day")) {
 					return;
 				}
-				const newRange = generateDateRange(start, day.dateString);
-				setSelectedRange({ start, end: day.dateString });
+
+				// SWAP if needed
+				let rangeStart = start;
+				let rangeEnd = day.dateString;
+				if (moment(rangeEnd).isBefore(rangeStart, "day")) {
+					[rangeStart, rangeEnd] = [rangeEnd, rangeStart];
+				}
+				const newRange = generateDateRange(rangeStart, rangeEnd);
+				setSelectedRange({ start: rangeStart, end: rangeEnd });
 				setMarkedDates({
 					...generateDisabledRanges(disabledDateRange),
 					...newRange,

@@ -1,17 +1,18 @@
 import { Property } from "@/constants/types";
-import React from "react";
-import { View, Dimensions, Text, Image } from "react-native";
-import Carousel from "../ui/Carousel";
-import HorizontalLine from "../ui/HorizontalLine";
-import CountryWithFlag from "../ui/CountryWithFlag";
-import { FavButton } from "../ui/MyButton";
 import calculateYearDiff from "@/utils/calculateYearDiff";
-import ProductDescription from "./ProductDescription";
-import Amenities from "./Amenities";
-import LocationAndMap from "./LocationAndMap";
-import Booking from "./Booking";
-import BookingComponent from "./Booking";
+import { useAuth } from "@clerk/clerk-expo";
 import moment from "moment";
+import React from "react";
+import { Dimensions, Image, Text, View } from "react-native";
+import Carousel from "../ui/Carousel";
+import CountryWithFlag from "../ui/CountryWithFlag";
+import HorizontalLine from "../ui/HorizontalLine";
+import { FavButton } from "../ui/MyButton";
+import Amenities from "./Amenities";
+import BookingComponent from "./Booking";
+import LocationAndMap from "./LocationAndMap";
+import ProductDescription from "./ProductDescription";
+import RatingStar from "./RatingStar";
 
 const { width } = Dimensions.get("window");
 
@@ -26,15 +27,21 @@ function ProductDetail({
 		lat: number;
 		lng: number;
 	};
+	// console.log("order:", JSON.stringify(product.orders, null, 2));
+	const { isSignedIn } = useAuth();
 
 	return (
 		<>
-			<View className="mt-8 ml-4">
-				<FavButton productId={product.id} isFav={isFav} withText={true} />
-			</View>
-			<HorizontalLine />
+			{isSignedIn && (
+				<>
+					<View className="mt-8 ml-4">
+						<FavButton productId={product.id} isFav={isFav} withText={true} />
+					</View>
+					<HorizontalLine />
+				</>
+			)}
 			{/* carousel */}
-			<View className="mx-4 rounded-lg overflow-hidden">
+			<View className="mx-4 mt-2 rounded-lg overflow-hidden">
 				<Carousel
 					images={product.image.map(i => i.imageUrl)}
 					flatListStyle={{ width, height: 300 }}
@@ -56,6 +63,11 @@ function ProductDetail({
 					{product.guests} guest{product.guests > 1 && "s"} &middot;{" "}
 					{product.baths} bath {product.baths > 1 && "s"}
 				</Text>
+				<View className="flex-row gap-x-2 ml-2">
+					<Text className="text-lg">Rating:</Text>
+					<RatingStar rate={product.rating} />
+				</View>
+
 				{/* host info */}
 				<View className="flex-row justify-start gap-x-4 mt-4">
 					<Image
@@ -104,10 +116,11 @@ function ProductDetail({
 						checkIn: o.checkIn,
 						checkOut: o.checkOut,
 					}))}
+					name={product.name}
 					image={product.image[0].imageUrl}
 					price={product.price}
 					productId={product.id}
-					rating={Number(product.rating.rating)}
+					rate={product.rating}
 					totalReview={product.reviews.length}
 					disabledDateRange={product.orders.map(o => ({
 						start: moment(o.checkIn).format("YYYY-MM-DD"),
