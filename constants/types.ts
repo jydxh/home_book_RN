@@ -80,10 +80,14 @@ export type Review = {
 	id: string;
 	rating: number;
 	comment: string;
-	createdAt: string | Date;
-	updateAt: string | Date;
-	userId: string;
+	createAt: string | Date;
 	propertyId: string;
+	user: {
+		city: string;
+		country: string;
+		firstName: string;
+		profileImage: string;
+	};
 };
 
 export type Amenity = {
@@ -126,4 +130,23 @@ export type Order = {
 export type Booking = {
 	checkIn: Date;
 	checkOut: Date;
+};
+
+export type ReviewDetail = {
+	id: string;
+	rating: number;
+	comment: string;
+	createAt: Date;
+	user: {
+		createAt: Date;
+		clerkId: string;
+		firstName: string;
+		country: string | null;
+		city: string | null;
+		profileImage: string | null;
+	};
+};
+
+export type ReviewResponse = {
+	reviews: Review[];
 };

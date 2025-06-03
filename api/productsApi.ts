@@ -3,6 +3,7 @@ import {
 	FetchedFavListDetailResponse,
 	FetchedProductsResponse,
 	Property,
+	ReviewResponse,
 } from "@/constants/types";
 import { useAuth } from "@clerk/clerk-expo";
 import {
@@ -224,6 +225,56 @@ export const useBookingProperty = ({
 		},
 		onSettled: () => {
 			onSettled?.();
+		},
+	});
+};
+
+export const useCreateReview = ({
+	rating,
+	comment,
+	productId,
+}: {
+	rating: number;
+	comment: string;
+	productId: string;
+}) => {
+	const { getToken } = useAuth();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async () => {
+			const token = await getToken();
+			const response = await fetch(backendProxyUrl + "/api/products/review", {
+				method: "POST",
+				body: JSON.stringify({ rating, comment, productId }),
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-type": "application/json",
+				},
+			});
+			if (!response.ok) throw new Error("error in create review action");
+			const result = await response.json();
+			console.log("result:", result);
+			return result;
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["fetchProductReviews", productId],
+			});
+		},
+	});
+};
+
+export const useFetchProductReviews = (productId: string) => {
+	return useQuery({
+		queryKey: ["fetchProductReviews", productId],
+		queryFn: async () => {
+			const response = await fetch(
+				backendProxyUrl + "/api/products/review?productId=" + productId
+			);
+			if (!response.ok) throw new Error("error in fetching product reviews");
+			const result = await response.json();
+			console.log("result:", result);
+			return result as ReviewResponse;
 		},
 	});
 };

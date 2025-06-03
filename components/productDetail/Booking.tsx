@@ -36,7 +36,7 @@ export default function BookingComponent({
 	name: string;
 	disabledDateRange: { start: string; end: string }[];
 }) {
-	console.log("disabledDateRange", disabledDateRange);
+	//console.log("disabledDateRange", disabledDateRange);
 	const { isSignedIn } = useAuth();
 	const [selectedRange, setSelectedRange] = useState<{
 		start: string | null;

@@ -1,9 +1,10 @@
 import { useFetchFavList, useFetchProductWithId } from "@/api/productsApi";
 import ProductDetail from "@/components/productDetail/ProductDetail";
+import SingleReview from "@/components/ui/SingleReview";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect } from "react";
-import { ActivityIndicator, ScrollView, Text } from "react-native";
+import { ActivityIndicator, FlatList, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProductDetailPage() {
@@ -63,12 +64,18 @@ export default function ProductDetailPage() {
 		return (
 			<SafeAreaView style={{ flex: 1 }} edges={["bottom", "left", "right"]}>
 				<LinearGradient colors={["#E5E7EB", "#D4D4D4"]} className="flex-1">
-					<ScrollView className="px-2 mb-2">
-						<ProductDetail
-							product={data.data}
-							isFav={(favList || []).includes(data.data.id)}
-						/>
-					</ScrollView>
+					<FlatList
+						data={data.data.reviews}
+						renderItem={({ item }) => <SingleReview reviewDetail={item} />}
+						keyExtractor={item => item.id}
+						ListHeaderComponent={
+							<ProductDetail
+								product={data.data}
+								isFav={(favList || []).includes(data.data.id)}
+							/>
+						}
+						contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: 16 }}
+					/>
 				</LinearGradient>
 			</SafeAreaView>
 		);
