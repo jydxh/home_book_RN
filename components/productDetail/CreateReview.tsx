@@ -2,8 +2,9 @@ import { useCreateReview } from "@/api/productsApi";
 import { useAuth } from "@clerk/clerk-expo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
+import Toast from "react-native-toast-message";
 import MyButton from "../ui/MyButton";
 
 const starArray = [1, 2, 3, 4, 5];
@@ -15,12 +16,39 @@ export default function CreateReview({ productId }: { productId: string }) {
 	const router = useRouter();
 	const { isSignedIn } = useAuth();
 
-	const { mutate } = useCreateReview({ comment, productId, rating });
+	const { mutate, isPending, isError, isSuccess } = useCreateReview({
+		comment,
+		productId,
+		rating,
+	});
 
 	const handleSubmit = () => {
 		if (!isSignedIn) router.push("/login");
 		mutate();
 	};
+
+	useEffect(() => {
+		if (isError) {
+			Toast.show({
+				type: "error",
+				position: "bottom",
+				text1: "An error met, please try again",
+				text1Style: { fontSize: 16 },
+			});
+		}
+	}, [isError]);
+
+	useEffect(() => {
+		if (isSuccess) {
+			setIsShowing(false);
+			Toast.show({
+				type: "success",
+				position: "bottom",
+				text1: "Successfully leave a comment!",
+				text1Style: { fontSize: 16 },
+			});
+		}
+	}, [isSuccess]);
 
 	return (
 		<>
@@ -76,12 +104,15 @@ export default function CreateReview({ productId }: { productId: string }) {
 						{/* Buttons */}
 						<View className="flex-row justify-center items-center gap-x-4">
 							<MyButton
+								disabled={isPending}
+								spinning={isPending}
 								text="Submit"
-								wrapperClassName="w-[20%]"
+								wrapperClassName="w-[30%]"
 								onPress={handleSubmit}
 							/>
 							<MyButton
-								wrapperClassName="w-[20%]"
+								disabled={isPending}
+								wrapperClassName="w-[30%]"
 								bgColor="bg-gray-500"
 								text="Reset"
 								onPress={() => {

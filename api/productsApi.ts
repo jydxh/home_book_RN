@@ -258,7 +258,7 @@ export const useCreateReview = ({
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ["fetchProductReviews", productId],
+				queryKey: ["productDetail", productId],
 			});
 		},
 	});
