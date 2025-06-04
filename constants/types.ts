@@ -95,7 +95,7 @@ export type Amenity = {
 	amenitiesId: string;
 };
 
-export type OrderStatus = "CHECKED" | "PENDING" | "CANCELLED";
+export type OrderStatus = "CHECKED" | "PENDING" | "CANCELED";
 
 export type User = {
 	id: number;
@@ -168,4 +168,4 @@ export type OrdersList = {
 	createdAt: Date;
 	totalNight: number;
 	orderStatus: OrderStatus;
-}[];
+};

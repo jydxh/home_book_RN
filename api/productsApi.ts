@@ -219,6 +219,7 @@ export const useBookingProperty = ({
 		},
 		onSuccess: data => {
 			queryClient.invalidateQueries({ queryKey: ["productDetail", productId] });
+			queryClient.invalidateQueries({ queryKey: ["fetchAllOrders"] });
 			onSuccess?.(data);
 		},
 		onError: error => {
