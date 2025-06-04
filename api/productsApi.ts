@@ -213,14 +213,14 @@ export const useBookingProperty = ({
 			});
 			if (!response.ok) throw new Error("error in booking property");
 			const result = (await response.json()) as { bookingId: string };
-			console.log("result:", result);
+			//	console.log("result:", result);
 			return result;
 		},
-		onSuccess: (data, _variables, _context) => {
+		onSuccess: data => {
 			queryClient.invalidateQueries({ queryKey: ["productDetail", productId] });
 			onSuccess?.(data);
 		},
-		onError: (error, _variables, _context) => {
+		onError: error => {
 			onError?.(error);
 		},
 		onSettled: () => {
@@ -233,10 +233,14 @@ export const useCreateReview = ({
 	rating,
 	comment,
 	productId,
+	onSuccess,
+	onError,
 }: {
 	rating: number;
 	comment: string;
 	productId: string;
+	onSuccess: () => void;
+	onError: () => void;
 }) => {
 	const { getToken } = useAuth();
 	const queryClient = useQueryClient();
@@ -253,13 +257,17 @@ export const useCreateReview = ({
 			});
 			if (!response.ok) throw new Error("error in create review action");
 			const result = await response.json();
-			console.log("result:", result);
+			//console.log("result:", result);
 			return result;
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["productDetail", productId],
 			});
+			onSuccess();
+		},
+		onError: () => {
+			onError();
 		},
 	});
 };
@@ -273,7 +281,7 @@ export const useFetchProductReviews = (productId: string) => {
 			);
 			if (!response.ok) throw new Error("error in fetching product reviews");
 			const result = await response.json();
-			console.log("result:", result);
+			//	console.log("result:", result);
 			return result as ReviewResponse;
 		},
 	});

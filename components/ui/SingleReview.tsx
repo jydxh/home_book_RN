@@ -11,7 +11,7 @@ export default function SingleReview({
 }: {
 	reviewDetail: Review;
 }) {
-	console.log(reviewDetail);
+	//console.log(reviewDetail);
 	countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 	const ratingStars: number[] = [];
 	for (let i = 0; i < 5; i++) {

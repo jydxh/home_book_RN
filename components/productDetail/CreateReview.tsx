@@ -2,7 +2,7 @@ import { useCreateReview } from "@/api/productsApi";
 import { useAuth } from "@clerk/clerk-expo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import Toast from "react-native-toast-message";
 import MyButton from "../ui/MyButton";
@@ -16,30 +16,11 @@ export default function CreateReview({ productId }: { productId: string }) {
 	const router = useRouter();
 	const { isSignedIn } = useAuth();
 
-	const { mutate, isPending, isError, isSuccess } = useCreateReview({
+	const { mutate, isPending } = useCreateReview({
 		comment,
 		productId,
 		rating,
-	});
-
-	const handleSubmit = () => {
-		if (!isSignedIn) router.push("/login");
-		mutate();
-	};
-
-	useEffect(() => {
-		if (isError) {
-			Toast.show({
-				type: "error",
-				position: "bottom",
-				text1: "An error met, please try again",
-				text1Style: { fontSize: 16 },
-			});
-		}
-	}, [isError]);
-
-	useEffect(() => {
-		if (isSuccess) {
+		onSuccess: () => {
 			setIsShowing(false);
 			Toast.show({
 				type: "success",
@@ -47,8 +28,21 @@ export default function CreateReview({ productId }: { productId: string }) {
 				text1: "Successfully leave a comment!",
 				text1Style: { fontSize: 16 },
 			});
-		}
-	}, [isSuccess]);
+		},
+		onError: () => {
+			Toast.show({
+				type: "error",
+				position: "bottom",
+				text1: "An error met, please try again",
+				text1Style: { fontSize: 16 },
+			});
+		},
+	});
+
+	const handleSubmit = () => {
+		if (!isSignedIn) router.push("/login");
+		mutate();
+	};
 
 	return (
 		<>

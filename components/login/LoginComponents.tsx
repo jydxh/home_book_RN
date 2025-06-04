@@ -1,6 +1,7 @@
 import { fetchDemoUserToken } from "@/actions/fetchDemoUserToken";
 import { emailRegex } from "@/constants/regex";
 import { useSignIn } from "@clerk/clerk-expo";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -12,7 +13,6 @@ import {
 	View,
 } from "react-native";
 import MyButton from "../ui/MyButton";
-import { useQueryClient } from "@tanstack/react-query";
 export default function LoginComponents({
 	description = "Sign in to get more features",
 }: {

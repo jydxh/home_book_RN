@@ -33,8 +33,8 @@ export default function ConfirmBook({
 	};
 }) {
 	const router = useRouter();
-	console.log("checkin:", new Date(selectedRange.start!));
-	const { mutate, isSuccess, isPending, isError, data } = useBookingProperty({
+	//console.log("checkin:", new Date(selectedRange.start!));
+	const { mutate, isPending } = useBookingProperty({
 		productId,
 		checkIn: moment(selectedRange.start!).format("YYYY-MM-DD HH:mm:ss"),
 		checkOut: moment(selectedRange.end!).format("YYYY-MM-DD HH:mm:ss"),
@@ -46,7 +46,7 @@ export default function ConfirmBook({
 				position: "bottom",
 			});
 			setShowConfirmBook(false);
-			// You can redirect here using data.bookingId if needed
+			// todo: redirect here using data.bookingId if needed
 		},
 		onError: () => {
 			setShowConfirmBook(false);

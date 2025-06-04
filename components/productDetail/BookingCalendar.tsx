@@ -134,12 +134,12 @@ export default function BookingCalendar({
 			};
 			current.add(1, "day");
 		}
-		console.log("range:", range);
+		//	console.log("range:", range);
 		return range;
 	};
 
 	const handleConfirm = () => {
-		console.log("selectedRange:", selectedRange);
+		//	console.log("selectedRange:", selectedRange);
 		setShowModal(false);
 		/* add the open confirm modal logic below */
 	};
