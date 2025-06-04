@@ -2,6 +2,7 @@ import { backendProxyUrl } from "@/constants/baseUrls";
 import {
 	FetchedFavListDetailResponse,
 	FetchedProductsResponse,
+	OrdersListResponse,
 	Property,
 	ReviewResponse,
 } from "@/constants/types";
@@ -283,6 +284,28 @@ export const useFetchProductReviews = (productId: string) => {
 			const result = await response.json();
 			//	console.log("result:", result);
 			return result as ReviewResponse;
+		},
+	});
+};
+
+export const useFetchOrders = () => {
+	const { getToken } = useAuth();
+
+	return useQuery({
+		queryKey: ["fetchAllOrders"],
+		queryFn: async () => {
+			const token = await getToken();
+			const response = await fetch(backendProxyUrl + "/api/products/booking", {
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-type": "application/json",
+				},
+			});
+			if (!response.ok) throw new Error("error in fetching orders");
+			const result = (await response.json()) as OrdersListResponse;
+			console.log("fetching order result:", result);
+			return result;
 		},
 	});
 };

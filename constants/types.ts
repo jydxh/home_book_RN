@@ -150,3 +150,22 @@ export type ReviewDetail = {
 export type ReviewResponse = {
 	reviews: Review[];
 };
+
+export type OrdersListResponse = {
+	bookings: OrdersList[];
+};
+
+export type OrdersList = {
+	property: {
+		name: string;
+		image: {
+			imageUrl: string;
+		}[];
+	};
+	id: string;
+	checkIn: Date;
+	checkOut: Date;
+	createdAt: Date;
+	totalNight: number;
+	orderStatus: OrderStatus;
+}[];

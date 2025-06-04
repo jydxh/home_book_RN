@@ -41,6 +41,7 @@ const _layout = () => {
 				name="myOrder"
 				options={{
 					title: "My Order",
+					headerTitleAlign: "center",
 					tabBarIcon: ({ color }) => (
 						<MaterialCommunityIcons
 							name="cart-variant"
