@@ -305,7 +305,32 @@ export const useFetchOrders = () => {
 			});
 			if (!response.ok) throw new Error("error in fetching orders");
 			const result = (await response.json()) as OrdersListResponse;
-			console.log("fetching order result:", result);
+			//	console.log("fetching order result:", result);
+			return result;
+		},
+	});
+};
+
+export const useFetchOrderById = (orderId: string) => {
+	const { getToken } = useAuth();
+
+	return useQuery({
+		queryKey: ["fetchOrderById", orderId],
+		queryFn: async () => {
+			const token = await getToken();
+			const response = await fetch(
+				backendProxyUrl + "/api/products/bookingDetail?orderId=" + orderId,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-type": "application/json",
+					},
+				}
+			);
+			if (!response.ok) throw new Error("error in fetch order by id");
+			const result = await response.json();
+			console.log("result from fetch order by ID", result);
 			return result;
 		},
 	});

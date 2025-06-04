@@ -169,3 +169,22 @@ export type OrdersList = {
 	totalNight: number;
 	orderStatus: OrderStatus;
 };
+
+export type OrderDetail = {
+	id: string;
+	orderTotal: number;
+	totalNight: number;
+	checkIn: Date;
+	checkOut: Date;
+	createdAt: Date;
+	paymentStatus: boolean;
+	orderStatus: OrderStatus;
+	property: {
+		address: string;
+		country: string;
+		name: string;
+		id: string;
+		image: { imageUrl: string }[];
+		price: number;
+	};
+};

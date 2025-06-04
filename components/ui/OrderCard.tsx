@@ -26,7 +26,7 @@ export default function OrderCard({
 	const router = useRouter();
 	return (
 		<View className="flex-1 border rounded-lg border-gray-400/50 w-full overflow-hidden bg-gray-200">
-			<TouchableOpacity onPress={() => router.replace(`/orders/${orderId}`)}>
+			<TouchableOpacity onPress={() => router.push(`/orders/${orderId}`)}>
 				<Image
 					style={{ width: "100%", height: 250 }}
 					source={{ uri: image }}
