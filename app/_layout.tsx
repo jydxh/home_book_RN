@@ -29,6 +29,14 @@ export default function RootLayout() {
 							name="login"
 							options={{ headerShown: false, presentation: "modal" }}
 						/>
+						<Stack.Screen
+							name="reviews/index"
+							options={{
+								headerShown: true,
+								headerTitleAlign: "center",
+								title: "My Reviews",
+							}}
+						/>
 					</Stack>
 					<Toast />
 				</QueryClientProvider>

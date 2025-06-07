@@ -55,6 +55,7 @@ const _layout = () => {
 				name="myAccount"
 				options={{
 					title: "My Account",
+					headerTitleAlign: "center",
 					tabBarIcon: ({ color }) => (
 						<MaterialCommunityIcons name="account" size={26} color={color} />
 					),

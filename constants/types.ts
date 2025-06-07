@@ -188,3 +188,31 @@ export type OrderDetail = {
 		price: number;
 	};
 };
+
+export enum ROLE {
+	USER,
+	VENDOR,
+	ADMIN,
+}
+
+export enum ApplicationStatus {
+	PENDING,
+	DENY,
+	APPROVED,
+	CANCELLED,
+}
+
+export type Profile = {
+	country: string | null;
+	clerkId: string;
+	firstName: string;
+	lastName: string;
+	userName: string;
+	city: string | null;
+	state: string | null;
+	profileImage: string | null;
+	role: ROLE;
+	vendorProfile: {
+		applicationStatus: ApplicationStatus;
+	}[];
+} | null;

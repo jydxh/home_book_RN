@@ -85,8 +85,8 @@ export default function OrderDetailPage() {
 
 	if (data)
 		return (
-			<SafeAreaView className="-mt-8">
-				<ScrollView className="mb-4">
+			<SafeAreaView edges={["bottom", "left", "right"]}>
+				<ScrollView className="my-4">
 					<View className="flex-1 mx-4 p-6 border rounded-xl border-gray-300">
 						<View className="gap-y-2">
 							<TextLine label="Order ID" text={data.orderDetail.id} />

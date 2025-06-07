@@ -35,8 +35,8 @@ export default function MyOrder() {
 		);
 	if (data) {
 		return (
-			<SafeAreaView>
-				<Text className="font-bold text-2xl mx-auto mb-6 -mt-6">
+			<SafeAreaView edges={["left", "right", "bottom"]}>
+				<Text className="font-bold text-2xl mx-auto my-6">
 					Lists of Your Orders
 				</Text>
 				{data.bookings.length === 0 ? (
