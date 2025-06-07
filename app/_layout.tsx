@@ -19,7 +19,11 @@ export default function RootLayout() {
 						/>
 						<Stack.Screen
 							name="orders/[id]/index"
-							options={{ headerShown: false, headerTitleAlign: "center" }}
+							options={{
+								headerShown: true,
+								headerTitleAlign: "center",
+								title: "Order Detail",
+							}}
 						/>
 						<Stack.Screen
 							name="login"

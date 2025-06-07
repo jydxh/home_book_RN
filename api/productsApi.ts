@@ -2,6 +2,7 @@ import { backendProxyUrl } from "@/constants/baseUrls";
 import {
 	FetchedFavListDetailResponse,
 	FetchedProductsResponse,
+	OrderDetail,
 	OrdersListResponse,
 	Property,
 	ReviewResponse,
@@ -329,9 +330,47 @@ export const useFetchOrderById = (orderId: string) => {
 				}
 			);
 			if (!response.ok) throw new Error("error in fetch order by id");
-			const result = await response.json();
-			console.log("result from fetch order by ID", result);
+			const result = (await response.json()) as { orderDetail: OrderDetail };
+
 			return result;
+		},
+	});
+};
+
+export const useCancelOrder = ({
+	orderId,
+	onError,
+	onSuccess,
+}: {
+	orderId: string;
+	onSuccess: () => void;
+	onError: () => void;
+}) => {
+	const { getToken } = useAuth();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async () => {
+			const token = await getToken();
+			const response = await fetch(
+				backendProxyUrl + "/api/products/bookingDetail",
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-type": "application/json",
+					},
+					body: JSON.stringify({ orderId }),
+				}
+			);
+			if (!response.ok) throw new Error("error in cancel order");
+		},
+		onError: () => {
+			onError();
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["fetchOrderById", orderId] });
+			queryClient.invalidateQueries({ queryKey: ["fetchAllOrders"] });
+			onSuccess();
 		},
 	});
 };
