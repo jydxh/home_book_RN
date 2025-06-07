@@ -128,7 +128,7 @@ export default function UpdateMyInfo({
 			visible={visible}
 			backdropColor={"rgba(255,255,255,0.2)"}>
 			<Toast />
-			<View className="flex-1 flex justify-center items-center">
+			<View className="flex-1  justify-center items-center">
 				<View className="bg-white p-10 rounded-lg w-full gap-y-2">
 					<Text className="text-center font-bold text-2xl mb-4">
 						Update My Info

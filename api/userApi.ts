@@ -64,3 +64,64 @@ export const useUpdateUserProfile = ({
 		},
 	});
 };
+
+export const useUpdateAvatar = ({
+	onError,
+	onSuccess,
+}: {
+	onSuccess: () => void;
+	onError: () => void;
+}) => {
+	const { getToken } = useAuth();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			formData,
+		}: {
+			formData: FormData;
+			imageUri: string;
+		}) => {
+			const token = await getToken();
+			const response = await fetch(backendProxyUrl + "/api/auth/avatar", {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-type": "multipart/form-data",
+				},
+				body: formData,
+			});
+			if (!response.ok) throw new Error("error in update avatar");
+			const result = (await response.json()) as { imageUrl: string };
+			console.log(result);
+		},
+
+		onMutate: async ({ imageUri }: { imageUri: string }) => {
+			// handling optimum ui update logic here
+			await queryClient.cancelQueries({ queryKey: ["fetchUserProfile"] });
+			const prevUserProfile = queryClient.getQueryData(["fetchUserProfile"]);
+
+			queryClient.setQueryData(
+				["fetchUserProfile"],
+				(old: { profile: Profile }) => {
+					if (!old) return old;
+					return { profile: { ...old.profile, profileImage: imageUri } };
+				}
+			);
+
+			return { prevUserProfile };
+		},
+
+		onError: (error, variables, context) => {
+			// roll back
+			queryClient.setQueryData(["fetchUserProfile"], context?.prevUserProfile);
+			onError();
+		},
+		onSuccess: () => {
+			onSuccess();
+		},
+		onSettled: () => {
+			// invalidate the query
+			queryClient.invalidateQueries({ queryKey: ["fetchUserProfile"] });
+		},
+	});
+};
