@@ -6,13 +6,22 @@ import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 export default function MyOrder() {
 	const { isSignedIn, isLoaded } = useAuth();
 	const router = useRouter();
 	/* only when clerk is loaded and user not login,
 	will push user to login page */
 	useEffect(() => {
-		if (isLoaded && !isSignedIn) router.push("/login");
+		if (isLoaded && !isSignedIn) {
+			Toast.show({
+				type: "error",
+				text1: "Please Login to View the Order Lists",
+				text1Style: { fontSize: 16 },
+				position: "bottom",
+			});
+			router.push("/login");
+		}
 	}, [isLoaded, isSignedIn, router]);
 
 	const { data, isLoading, isError } = useFetchOrders();

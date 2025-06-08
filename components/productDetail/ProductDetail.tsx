@@ -2,7 +2,7 @@ import { Property } from "@/constants/types";
 import calculateYearDiff from "@/utils/calculateYearDiff";
 import { useAuth } from "@clerk/clerk-expo";
 import moment from "moment";
-import React, { useState } from "react";
+import React from "react";
 import { Dimensions, Image, Text, View } from "react-native";
 import Carousel from "../ui/Carousel";
 import CountryWithFlag from "../ui/CountryWithFlag";
@@ -30,7 +30,7 @@ function ProductDetail({
 	};
 	// console.log("order:", JSON.stringify(product.orders, null, 2));
 	const { isSignedIn } = useAuth();
-	const [showReview, setShowReview] = useState(true);
+
 	return (
 		<>
 			{isSignedIn && (
@@ -133,8 +133,7 @@ function ProductDetail({
 			{/* Create a review */}
 			<View>
 				<Text className="font-semibold text-xl ">Reviews:</Text>
-				{/* this component will be conditional rendering later, only when the user login and user has book the property and also this property is not belongs to the user */}
-				{showReview && <CreateReview productId={product.id} />}
+				<CreateReview productId={product.id} />
 			</View>
 		</>
 	);

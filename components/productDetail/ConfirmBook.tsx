@@ -47,6 +47,7 @@ export default function ConfirmBook({
 			});
 			setShowConfirmBook(false);
 			// todo: redirect here using data.bookingId if needed
+			router.push(`/orders/${data.bookingId}`);
 		},
 		onError: () => {
 			setShowConfirmBook(false);

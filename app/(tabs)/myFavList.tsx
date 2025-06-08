@@ -9,33 +9,27 @@ import { useCallback } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 export default function MyFavListPage() {
-	const { isSignedIn } = useAuth();
+	const { isSignedIn, isLoaded } = useAuth();
 	const router = useRouter();
 
-	if (isSignedIn !== true) {
+	if (isLoaded && isSignedIn !== true) {
 		Toast.show({
 			type: "error",
-			text1: "Login to View the Favourite List",
+			text1: "Please Login to View the Favourite List",
 			text1Style: { fontSize: 16 },
 			position: "bottom",
 		});
 		router.push("/login");
 	}
 
-	const { data, isPending, isError, isLoading } = useFetchFavListDetails();
+	const { data, isError, isLoading } = useFetchFavListDetails();
 
 	const renderProductCard = useCallback(
 		({ item }: { item: ProductType }) => {
 			const favList = data?.data.flatMap(item => item.id) || [];
-			return (
-				<ProductCard
-					product={item}
-					favList={favList || []}
-					favListLoading={isPending}
-				/>
-			);
+			return <ProductCard product={item} favList={favList || []} />;
 		},
-		[data?.data, isPending]
+		[data?.data]
 	);
 
 	if (isSignedIn !== true) {

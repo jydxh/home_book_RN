@@ -171,7 +171,6 @@ export default function LoginComponents({
 					<View>
 						<MyButton
 							disabled={isSubmitting}
-							spinning={isSubmitting}
 							onPress={() => router.push("/")}
 							text="To Home"
 							wrapperClassName="mt-2"

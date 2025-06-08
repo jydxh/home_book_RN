@@ -4,17 +4,30 @@ import UserInfo from "@/components/myAccount/UserInfo";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import MyButton from "@/components/ui/MyButton";
 import { userDefaultAvatarUrl } from "@/constants/baseUrls";
-import { useClerk } from "@clerk/clerk-expo";
+import { useAuth } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ActivityIndicator, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 const MyAccountPage = () => {
-	const { signOut } = useClerk();
+	const { isSignedIn, isLoaded, signOut } = useAuth();
 	const router = useRouter();
 	const { data, isLoading, isError } = useFetchUserProfile();
 	const [showUpdate, setShowUpdate] = useState(false);
+
+	useEffect(() => {
+		if (isLoaded && !isSignedIn) {
+			Toast.show({
+				type: "info",
+				text1: "Please Login to View My Account",
+				position: "bottom",
+				text1Style: { fontSize: 16 },
+			});
+			router.push("/login");
+		}
+	}, [isSignedIn, router, isLoaded]);
 
 	if (isLoading)
 		return (
