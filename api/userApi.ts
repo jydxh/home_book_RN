@@ -1,5 +1,5 @@
 import { backendProxyUrl } from "@/constants/baseUrls";
-import { Profile } from "@/constants/types";
+import { Profile, UserReviewsResponse } from "@/constants/types";
 import { useAuth } from "@clerk/clerk-expo";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -122,6 +122,26 @@ export const useUpdateAvatar = ({
 		onSettled: () => {
 			// invalidate the query
 			queryClient.invalidateQueries({ queryKey: ["fetchUserProfile"] });
+		},
+	});
+};
+
+export const useFetchUserReviews = () => {
+	const { getToken } = useAuth();
+	return useQuery({
+		queryKey: ["fetchUserReviews"],
+		queryFn: async () => {
+			const token = await getToken();
+			const response = await fetch(backendProxyUrl + "/api/auth/user/reviews", {
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-type": "application/json",
+				},
+			});
+			if (!response.ok) throw new Error("error in fetch user reviews");
+			const result = (await response.json()) as UserReviewsResponse;
+			return result;
 		},
 	});
 };

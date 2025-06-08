@@ -73,7 +73,7 @@ export default function SingleReview({
 					})}
 				</View>
 				<Text className="font-lg ml-2">
-					{moment.utc(reviewDetail.createAt).format("MMM YYYY")}
+					{moment(reviewDetail.createAt).format("MMMM YYYY")}
 				</Text>
 			</View>
 			{/* review content */}

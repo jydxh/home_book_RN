@@ -216,3 +216,25 @@ export type Profile = {
 		applicationStatus: ApplicationStatus;
 	}[];
 } | null;
+
+export type UserReviewsResponse = {
+	reviews: {
+		userId: string;
+		id: string;
+		rating: number;
+		comment: string;
+		createAt: Date;
+		updateAt: Date;
+		propertyId: string;
+		property: {
+			id: string;
+			name: string;
+			country: string;
+			image: {
+				id: string;
+				propertyId: string;
+				imageUrl: string;
+			}[];
+		};
+	}[];
+};
