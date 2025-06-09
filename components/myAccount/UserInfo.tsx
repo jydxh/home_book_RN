@@ -7,6 +7,7 @@ import {
 	Dimensions,
 	Image,
 	Modal,
+	Platform,
 	Text,
 	TouchableOpacity,
 	View,
@@ -88,6 +89,7 @@ export default function UserInfo({
 				text1Style: { fontSize: 16 },
 			});
 		}
+
 		const formData = new FormData();
 		formData.append("avatar", {
 			uri: image,
@@ -98,9 +100,10 @@ export default function UserInfo({
 		mutate({ formData, imageUri: fileInfo.uri });
 		setShowModal(false);
 	};
+
 	return (
 		<View className="flex-row justify-between items-center px-10">
-			<TouchableOpacity onPress={handlePressAvatar}>
+			{Platform.OS === "web" ? (
 				<Image
 					className="rounded-full"
 					width={100}
@@ -109,38 +112,51 @@ export default function UserInfo({
 						uri: imageUrl,
 					}}
 				/>
-			</TouchableOpacity>
-			<Modal
-				visible={showModal}
-				animationType="slide"
-				transparent={false}
-				backdropColor={"rgba(255,255,255,0.2)"}>
-				<Toast />
-				<View className="flex-1 justify-center items-center">
-					<View className="bg-white p-8 rounded-lg w-full gap-y-4">
+			) : (
+				<>
+					<TouchableOpacity onPress={handlePressAvatar}>
 						<Image
-							className="mx-auto"
-							width={Dimensions.get("window").width * 0.85}
-							height={Dimensions.get("window").width * 0.85}
-							resizeMode="cover"
-							source={{ uri: image }}
+							className="rounded-full"
+							width={100}
+							height={100}
+							source={{
+								uri: imageUrl,
+							}}
 						/>
-						<View className="flex-row justify-between items-center px-10 mt-4">
-							<MyButton
-								text="Reset"
-								wrapperClassName="w-[40%]"
-								onPress={handleReset}
-							/>
-							<MyButton
-								text="Use the Image"
-								wrapperClassName="w-[40%]"
-								bgColor="bg-red-400"
-								onPress={handleUploadAvatar}
-							/>
+					</TouchableOpacity>
+					<Modal
+						visible={showModal}
+						animationType="slide"
+						transparent={false}
+						backdropColor={"rgba(255,255,255,0.2)"}>
+						<Toast />
+						<View className="flex-1 justify-center items-center">
+							<View className="bg-white p-8 rounded-lg w-full gap-y-4">
+								<Image
+									className="mx-auto"
+									width={Dimensions.get("window").width * 0.85}
+									height={Dimensions.get("window").width * 0.85}
+									resizeMode="cover"
+									source={{ uri: image }}
+								/>
+								<View className="flex-row justify-between items-center px-10 mt-4">
+									<MyButton
+										text="Reset"
+										wrapperClassName="w-[40%]"
+										onPress={handleReset}
+									/>
+									<MyButton
+										text="Use the Image"
+										wrapperClassName="w-[40%]"
+										bgColor="bg-red-400"
+										onPress={handleUploadAvatar}
+									/>
+								</View>
+							</View>
 						</View>
-					</View>
-				</View>
-			</Modal>
+					</Modal>
+				</>
+			)}
 			<View>
 				<View className="flex-row items-center gap-x-2">
 					<Text className="font-semibold text-lg">UserName:</Text>

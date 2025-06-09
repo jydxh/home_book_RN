@@ -1,18 +1,16 @@
 import { userDefaultAvatarUrl } from "@/constants/baseUrls";
 import { Review } from "@/constants/types";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import countries from "i18n-iso-countries";
 import moment from "moment";
 import React from "react";
 import { Image, Text, View } from "react-native";
-
 export default function SingleReview({
 	reviewDetail,
 }: {
 	reviewDetail: Review;
 }) {
 	//console.log(reviewDetail);
-	countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+
 	const ratingStars: number[] = [];
 	for (let i = 0; i < 5; i++) {
 		if (i < reviewDetail.rating) {
@@ -38,11 +36,8 @@ export default function SingleReview({
 						{reviewDetail.user.firstName}
 					</Text>
 					<View className="flex-row gap-2 ">
-						<Text>{reviewDetail.user.city}, </Text>
-						<Text>
-							{countries.getName(reviewDetail.user.country, "en") ||
-								reviewDetail.user.country}
-						</Text>
+						<Text>{reviewDetail.user.city} </Text>
+						<Text>{reviewDetail.user.country}</Text>
 					</View>
 				</View>
 			</View>

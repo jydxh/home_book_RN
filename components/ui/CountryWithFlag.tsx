@@ -1,6 +1,5 @@
-import { View, Text, Image, StyleProp, ImageStyle } from "react-native";
 import React from "react";
-import countries from "i18n-iso-countries";
+import { Image, ImageStyle, StyleProp, Text, View } from "react-native";
 export default function CountryWithFlag({
 	country,
 	textClassName,
@@ -12,7 +11,6 @@ export default function CountryWithFlag({
 	imageStyle?: StyleProp<ImageStyle>;
 	spaceBetween?: boolean;
 }) {
-	countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 	return (
 		<View
 			className={`${
@@ -22,7 +20,7 @@ export default function CountryWithFlag({
 				className={`text-clip ${textClassName}`}
 				ellipsizeMode="tail"
 				numberOfLines={1}>
-				{countries.getName(country, "en", { select: "alias" })}
+				{country}
 			</Text>
 			<Image
 				style={[{ width: 24, height: 16, marginLeft: 4 }, imageStyle]}
