@@ -6,7 +6,13 @@ import { useAuth } from "@clerk/clerk-expo";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback } from "react";
 
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import {
+	ActivityIndicator,
+	FlatList,
+	Platform,
+	Text,
+	View,
+} from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 export default function Home() {
@@ -78,11 +84,15 @@ export default function Home() {
 								)}
 								renderItem={renderProductCard}
 								onEndReached={() => {
-									if (hasNextPage && !isFetchingNextPage) {
+									if (
+										hasNextPage &&
+										!isFetchingNextPage &&
+										(Platform.OS !== "web" || flatData.length > 0)
+									) {
 										fetchNextPage();
 									}
 								}}
-								onEndReachedThreshold={0.5}
+								onEndReachedThreshold={0.01}
 								ListFooterComponent={
 									isFetchingNextPage ? (
 										<ActivityIndicator size="small" color="#FF6467" />

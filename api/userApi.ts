@@ -86,7 +86,7 @@ export const useUpdateAvatar = ({
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${token}`,
-					"Content-type": "multipart/form-data",
+					//"Content-type": "multipart/form-data",
 				},
 				body: formData,
 			});
