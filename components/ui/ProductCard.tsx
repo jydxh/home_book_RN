@@ -1,13 +1,13 @@
 import { ProductType } from "@/constants/types";
 import { useAuth } from "@clerk/clerk-expo";
-import countries from "i18n-iso-countries";
-import { Image, Pressable, Text, View } from "react-native";
-import DistanceAway from "../home/DistanceAway";
-import { FavBtnNotLogin, FavButton } from "./MyButton";
-import Carousel from "./Carousel";
-import React from "react";
+
 import { useRouter } from "expo-router";
+import React from "react";
+import { Pressable, Text, View } from "react-native";
+import DistanceAway from "../home/DistanceAway";
+import Carousel from "./Carousel";
 import CountryWithFlag from "./CountryWithFlag";
+import { FavBtnNotLogin, FavButton } from "./MyButton";
 
 const ProductCard = React.memo(function ProductCard({
 	product,
@@ -16,7 +16,6 @@ const ProductCard = React.memo(function ProductCard({
 	product: ProductType;
 	favList: string[];
 }) {
-	countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 	const { isSignedIn } = useAuth();
 	const isFav = favList.includes(product.id);
 	const router = useRouter();

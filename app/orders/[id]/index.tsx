@@ -3,7 +3,7 @@ import HorizontalLine from "@/components/ui/HorizontalLine";
 import MyButton from "@/components/ui/MyButton";
 import OrderStatusComponent from "@/components/ui/OrderStatus";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import countries from "i18n-iso-countries";
+
 import moment from "moment";
 import React from "react";
 import {
@@ -19,7 +19,7 @@ import Toast from "react-native-toast-message";
 
 const screenWidth = Dimensions.get("window").width;
 const imageWidth = screenWidth * 0.8;
-countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+
 const TextLine = ({
 	label,
 	text,
@@ -132,11 +132,7 @@ export default function OrderDetailPage() {
 								label="Rental Address"
 							/>
 							<TextLine
-								text={countries.getName(
-									data.orderDetail.property.country,
-									"en",
-									{ select: "alias" }
-								)}
+								text={data.orderDetail.property.country}
 								label="Rental Country"
 							/>
 							<TextLine
