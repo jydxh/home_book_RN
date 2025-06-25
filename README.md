@@ -1,6 +1,3 @@
-# Welcome to your Expo app 👋
-
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
 
@@ -16,35 +13,52 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Technical Stacks
+<ul>
+							<li>
+								 <strong>React Native</strong> - Core frameworks for building a
+								cross-platform native app while using a single codebase
+							</li>
+							<li>
+							 <strong>Expo</strong> - Speeds up the development environment
+								set up and provides more convenient tools for development
+							</li>
+							<li>
+								 <strong>Clerk</strong> - Handles frontend authentication and
+								integrates seamlessly with the backend API route
+							</li>
+							<li>
+								 <strong>Tanstack Query</strong> - Manages communication with
+								the backend, data caching, and optimistic UI updates
+							</li>
+						</ul>
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Description
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+<article>
+   	<p >
+								The native app is built to extend the 
+								<a
+									href="https://haochengportfolio.com/"
+									target="_blank"
+									>
+									Home Book Next.js full-stack web application
+								</a>
+								by consuming its API Routes and reusing the same database and
+								business logic. All user-facing functionalities available in the
+								Next.js app have been fully migrated to this React Native
+								application. This ensures a seamless cross-platform experience,
+								allowing users to book products on the native app and later view
+								their orders on the web app, and vice versa.
+							</p>
+							<p >
+								<strong>Clerk</strong> handles authentication and integration
+								with the backend to support both demo user login and standard
+								login flow.
+							</p>
+							<p>
+								<strong>Nativewind</strong> enables consistent UI styling and
+								faster development.
+							</p>
+</article>
